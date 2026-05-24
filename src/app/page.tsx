@@ -48,9 +48,6 @@ export default function Home() {
       <section className="relative py-24 md:py-32 border-b border-zinc-200 dark:border-zinc-800">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-8 flex flex-col items-start gap-6">
-            <span className="font-mono text-xs uppercase tracking-widest text-zinc-500">
-              // KONSOL PENATALAKSANAAN DIET MANDIRI
-            </span>
             <h1 className="font-display text-4xl sm:text-6xl font-bold tracking-tight leading-[1.05] text-balance">
               Kalkulasi &amp; Kontrol Nutrisi Medis Secara Mandiri.
             </h1>
