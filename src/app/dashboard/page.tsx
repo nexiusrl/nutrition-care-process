@@ -304,12 +304,9 @@ function SelfCareDashboardContent() {
         <div className="relative border border-red-200 bg-red-50/20 dark:border-red-950/20 dark:bg-red-950/5 p-6 font-mono text-[11px] leading-relaxed rounded-lg overflow-hidden">
           <div className="absolute top-0 left-0 bottom-0 w-1.5 bg-red-600 dark:bg-red-500"></div>
           <div className="flex gap-4 items-start">
-            <div className="text-red-600 dark:text-red-500 font-bold text-base select-none pt-0.5">
-              ⚠️
-            </div>
             <div className="space-y-1.5 flex-1">
               <div className="flex justify-between items-center text-red-700 dark:text-red-400 font-bold">
-                <span>// MEDICAL DISCLAIMER &amp; KESELAMATAN PENGGUNA</span>
+                <span>MEDICAL DISCLAIMER &amp; KESELAMATAN PENGGUNA</span>
                 <span className="text-[8px] font-mono border border-red-300 dark:border-red-900 px-1.5 py-0.5 rounded uppercase tracking-wider text-red-600 dark:text-red-400">
                   PAGT-KEMENKES
                 </span>
