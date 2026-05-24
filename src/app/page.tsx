@@ -62,7 +62,7 @@ export default function Home() {
               <div className="flex gap-4 items-start">
                 <div className="flex-1">
                   <div className="flex justify-between items-center mb-1 text-red-700 dark:text-red-400 font-bold">
-                    <span>PEMBERITAHUAN MEDIS PENTING</span>
+                    <span>DISCLAIMER</span>
                   </div>
                   <p className="text-zinc-600 dark:text-zinc-400 font-sans">
                     Aplikasi ini bersifat edukatif dan simulasi mandiri berbasis
