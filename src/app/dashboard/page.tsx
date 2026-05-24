@@ -2,6 +2,7 @@
 
 import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import {
   calculateBBI,
@@ -199,11 +200,15 @@ function SelfCareDashboardContent() {
       {/* Top Navbar */}
       <header className="border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 px-6 h-16 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Link
-            href="/"
-            className="h-6 w-6 bg-zinc-900 dark:bg-zinc-100 flex items-center justify-center text-white dark:text-black font-display font-bold text-xs"
-          >
-            N
+          <Link href="/" className="flex items-center">
+            <Image
+              src="/logo.png"
+              alt="NCP Logo"
+              width={120}
+              height={48}
+              className="h-12 w-auto object-contain dark:invert"
+              priority
+            />
           </Link>
           <span className="font-display font-bold tracking-tight">
             KONSOL ASUHAN GIZI MANDIRI

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Home() {
@@ -9,9 +10,13 @@ export default function Home() {
       <header className="border-b border-zinc-200 dark:border-zinc-800 bg-white/50 dark:bg-black/50 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="h-6 w-6 bg-primary flex items-center justify-center text-primary-foreground font-display font-bold text-sm tracking-tighter">
-              N
-            </div>
+            <Image
+              src="/logo.png"
+              alt="NCP Logo"
+              width={120}
+              height={24}
+              className="h-13 w-auto object-contain dark:invert"
+            />
             <span className="font-display font-bold tracking-tight text-lg">
               NUTRITION CARE PROCESS
             </span>
