@@ -526,9 +526,6 @@ function SelfCareDashboardContent() {
 
                 <div className="relative border border-red-200/60 bg-red-50/10 dark:border-red-950/40 dark:bg-red-950/5 p-4 text-xs rounded font-mono flex gap-3 items-start mb-4 overflow-hidden">
                   <div className="absolute top-0 left-0 bottom-0 w-1 bg-red-500/70"></div>
-                  <span className="text-red-600 dark:text-red-400 text-base select-none">
-                    ⚠️
-                  </span>
                   <div className="flex-1">
                     <strong className="text-red-700 dark:text-red-400 block mb-0.5">
                       PERINGATAN KONSULTASI MEDIS
