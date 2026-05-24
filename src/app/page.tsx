@@ -57,11 +57,21 @@ export default function Home() {
               berdasarkan pedoman gizi klinis Kemenkes RI.
             </p>
 
-            <div className="p-4 border border-red-200 bg-red-50/50 dark:border-red-950 dark:bg-red-950/20 text-xs text-red-800 dark:text-red-300 font-sans max-w-xl leading-relaxed">
-              <strong>Pemberitahuan Penting:</strong> Aplikasi ini bersifat
-              edukatif dan simulasi mandiri berbasis standar PAGT. Hasil
-              perhitungan tidak menggantikan diagnosis medis profesional dari
-              dokter atau ahli gizi terdaftar.
+            <div className="relative border border-red-200 bg-red-50/30 dark:border-red-950/30 dark:bg-red-950/10 p-5 font-mono text-[11px] leading-relaxed max-w-xl overflow-hidden rounded">
+              <div className="absolute top-0 left-0 bottom-0 w-1 bg-red-500"></div>
+              <div className="flex gap-4 items-start">
+                <div className="flex-1">
+                  <div className="flex justify-between items-center mb-1 text-red-700 dark:text-red-400 font-bold">
+                    <span>PEMBERITAHUAN MEDIS PENTING</span>
+                  </div>
+                  <p className="text-zinc-600 dark:text-zinc-400 font-sans">
+                    Aplikasi ini bersifat edukatif dan simulasi mandiri berbasis
+                    standar PAGT Kemenkes. Hasil perhitungan tidak menggantikan
+                    diagnosis medis profesional dari dokter atau ahli gizi
+                    terdaftar.
+                  </p>
+                </div>
+              </div>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto pt-2">
@@ -126,7 +136,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="mb-12">
             <span className="font-mono text-xs text-zinc-500 block mb-2">
-              // ALUR PEMANDU MANDIRI
+              ALUR PEMANDU MANDIRI
             </span>
             <h2 className="font-display text-3xl font-bold tracking-tight">
               Siklus ADIME Berbasis Self-Care
@@ -232,7 +242,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="mb-12">
             <span className="font-mono text-xs text-zinc-500 block mb-2">
-              // KONDISI PATOLOGIS
+              KONDISI PATOLOGIS
             </span>
             <h2 className="font-display text-3xl font-bold tracking-tight">
               Modul Rumatan Gizi Klinis

@@ -301,21 +301,33 @@ function SelfCareDashboardContent() {
 
       {/* Main Container */}
       <main className="max-w-4xl w-full mx-auto p-4 md:p-6 space-y-6">
-        {/* Medical Disclaimer Banner */}
-        <div className="border border-red-200 bg-red-50 dark:border-red-950/50 dark:bg-red-950/20 p-4 text-red-800 dark:text-red-300 text-xs rounded-lg space-y-1">
-          <p className="font-bold">
-            // MEDICAL DISCLAIMER &amp; PERNYATAAN KESELAMATAN
-          </p>
-          <p className="leading-relaxed">
-            Hasil perhitungan gizi, target zat gizi makro/mikro, serta saran
-            gizi otomatis (PES Statement) yang dihasilkan oleh aplikasi ini
-            didasarkan pada standar asuhan PAGT Kemenkes RI secara
-            komputasional. Konsol ini berfungsi sebagai alat bantu simulasi
-            edukasi gizi mandiri dan{" "}
-            <strong>bukan pengganti konsultasi medis profesional</strong>.
-            Konsultasikan pola makan Anda dengan dokter atau dietisien sebelum
-            memulai perubahan diet radikal.
-          </p>
+        <div className="relative border border-red-200 bg-red-50/20 dark:border-red-950/20 dark:bg-red-950/5 p-6 font-mono text-[11px] leading-relaxed rounded-lg overflow-hidden">
+          <div className="absolute top-0 left-0 bottom-0 w-1.5 bg-red-600 dark:bg-red-500"></div>
+          <div className="flex gap-4 items-start">
+            <div className="text-red-600 dark:text-red-500 font-bold text-base select-none pt-0.5">
+              ⚠️
+            </div>
+            <div className="space-y-1.5 flex-1">
+              <div className="flex justify-between items-center text-red-700 dark:text-red-400 font-bold">
+                <span>// MEDICAL DISCLAIMER &amp; KESELAMATAN PENGGUNA</span>
+                <span className="text-[8px] font-mono border border-red-300 dark:border-red-900 px-1.5 py-0.5 rounded uppercase tracking-wider text-red-600 dark:text-red-400">
+                  PAGT-KEMENKES
+                </span>
+              </div>
+              <p className="text-zinc-600 dark:text-zinc-400 font-sans text-xs leading-relaxed">
+                Hasil perhitungan gizi, target zat gizi makro/mikro, serta saran
+                gizi otomatis (PES Statement) yang dihasilkan oleh konsol ini
+                didasarkan pada standar asuhan PAGT Kemenkes RI secara
+                komputasional. Konsol ini berfungsi sebagai alat bantu simulasi
+                edukasi gizi mandiri dan{" "}
+                <strong className="text-zinc-900 dark:text-zinc-100 font-semibold underline decoration-red-500/50 decoration-2">
+                  bukan pengganti konsultasi medis profesional
+                </strong>
+                . Konsultasikan pola makan Anda dengan dokter atau dietisien
+                sebelum memulai perubahan diet radikal.
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* User Profile Configurator Header */}
@@ -385,7 +397,7 @@ function SelfCareDashboardContent() {
 
                 {/* Antropometri */}
                 <h4 className="font-mono text-xs text-zinc-400 mb-3 uppercase tracking-wider">
-                  // 1.1 Data Fisik &amp; Antropometri
+                  Data Fisik &amp; Antropometri
                 </h4>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                   <div>
@@ -440,7 +452,7 @@ function SelfCareDashboardContent() {
 
                 {/* Penyakit & Lab */}
                 <h4 className="font-mono text-xs text-zinc-400 mb-3 uppercase tracking-wider">
-                  // 1.2 Kondisi Medis &amp; Hasil Laboratorium
+                  Kondisi Medis &amp; Hasil Laboratorium
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                   <div>
@@ -595,11 +607,22 @@ function SelfCareDashboardContent() {
                   Langkah 2: Diagnosis Gizi Otomatis (PES Mandiri)
                 </h3>
 
-                <div className="border border-red-200 bg-red-50 dark:border-red-950/40 dark:bg-red-950/20 p-4 text-red-800 dark:text-red-300 text-xs rounded mb-4 font-mono">
-                  <strong>PENTING:</strong> Draf PES Statement di bawah
-                  dianalisis otomatis oleh sistem berdasarkan input parameter
-                  klinis Anda. Harap konsultasikan draf ini dengan dokter
-                  keluarga Anda untuk penegakan diagnosa definitif.
+                <div className="relative border border-red-200/60 bg-red-50/10 dark:border-red-950/40 dark:bg-red-950/5 p-4 text-xs rounded font-mono flex gap-3 items-start mb-4 overflow-hidden">
+                  <div className="absolute top-0 left-0 bottom-0 w-1 bg-red-500/70"></div>
+                  <span className="text-red-600 dark:text-red-400 text-base select-none">
+                    ⚠️
+                  </span>
+                  <div className="flex-1">
+                    <strong className="text-red-700 dark:text-red-400 block mb-0.5">
+                      PERINGATAN KONSULTASI MEDIS
+                    </strong>
+                    <p className="text-zinc-600 dark:text-zinc-400 font-sans text-xs leading-relaxed">
+                      Draf PES Statement di bawah dianalisis otomatis oleh
+                      sistem berdasarkan input parameter klinis Anda. Harap
+                      konsultasikan draf ini dengan dokter keluarga Anda untuk
+                      penegakan diagnosa definitif.
+                    </p>
+                  </div>
                 </div>
 
                 <div className="space-y-4">
@@ -655,7 +678,7 @@ function SelfCareDashboardContent() {
 
                 {/* Macros & Micros Targets */}
                 <h4 className="font-mono text-xs text-zinc-400 mb-3 uppercase tracking-wider">
-                  // Batas Gizi Makro &amp; Mikro Harian
+                  Batas Gizi Makro &amp; Mikro Harian
                 </h4>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                   {/* Protein */}
@@ -764,7 +787,7 @@ function SelfCareDashboardContent() {
                   {/* Visual Progress bars */}
                   <div className="lg:col-span-6 space-y-4">
                     <h4 className="font-mono text-xs text-zinc-400 uppercase tracking-wider">
-                      // Progres Asupan Hari Ini
+                      Progres Asupan Hari Ini
                     </h4>
 
                     <div className="space-y-4 border border-zinc-200 dark:border-zinc-800 p-4 bg-zinc-50 dark:bg-zinc-900 rounded-lg">
@@ -824,7 +847,7 @@ function SelfCareDashboardContent() {
                   {/* Input log & details */}
                   <div className="lg:col-span-6 space-y-4">
                     <h4 className="font-mono text-xs text-zinc-400 uppercase tracking-wider">
-                      // Catat Konsumsi Makanan
+                      Catat Konsumsi Makanan
                     </h4>
                     <form
                       onSubmit={handleAddLog}
@@ -975,7 +998,7 @@ export default function SelfCareDashboard() {
     <Suspense
       fallback={
         <div className="min-h-screen bg-[#fafafa] dark:bg-[#09090b] flex items-center justify-center font-mono text-xs text-zinc-500">
-          // MEMUAT KONSOL GIZI MANDIRI...
+          MEMUAT KONSOL GIZI MANDIRI...
         </div>
       }
     >
