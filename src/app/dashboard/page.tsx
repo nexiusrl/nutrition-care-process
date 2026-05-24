@@ -194,85 +194,6 @@ function SelfCareDashboardContent() {
   const totalProtein = logs.reduce((acc, curr) => acc + curr.protein, 0);
   const totalSodium = logs.reduce((acc, curr) => acc + curr.sodium, 0);
 
-  // Chat State
-  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
-    {
-      id: "1",
-      sender: "ai",
-      text: "Halo! Saya AI Gizi Assistant. Saya dapat membantu memberikan rekomendasi diet mandiri berdasarkan parameter tubuh dan penyakit Anda. Ada yang ingin Anda tanyakan?",
-      timestamp: "08:00",
-    },
-  ]);
-  const [typedMessage, setTypedMessage] = useState("");
-
-  const handleSendMessage = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!typedMessage) return;
-
-    const userMsg: ChatMessage = {
-      id: Date.now().toString(),
-      sender: "user",
-      text: typedMessage,
-      timestamp: new Date().toLocaleTimeString("id-ID", {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-    };
-
-    setChatMessages((prev) => [...prev, userMsg]);
-    setTypedMessage("");
-
-    // Generate smart contextual AI reply
-    setTimeout(() => {
-      let replyText =
-        "Pesan Anda diterima. Harap pastikan asupan gizi harian Anda tidak melebihi batas target.";
-      const query = typedMessage.toLowerCase();
-
-      if (
-        query.includes("protein") ||
-        query.includes("telur") ||
-        query.includes("daging")
-      ) {
-        if (diseaseType === "kidney") {
-          replyText = `Karena Anda memilih modul Ginjal (eGFR: ${eGFR}), target protein Anda dibatasi ketat sebesar ${finalRecs.protein}g. Batasi daging merah dan jeroan, pilih protein bernilai biologi tinggi seperti putih telur dalam batas wajar.`;
-        } else {
-          replyText = `Kebutuhan protein ideal Anda adalah ${finalRecs.protein}g per hari. Sangat baik untuk menjaga kebugaran otot.`;
-        }
-      } else if (
-        query.includes("garam") ||
-        query.includes("asin") ||
-        query.includes("tensi") ||
-        query.includes("hipertensi")
-      ) {
-        replyText = `Untuk menjaga tekanan darah Anda (Sistolik: ${bpSystolic} mmHg), batasi konsumsi garam maksimal ${finalRecs.sodium}mg natrium per hari (setara 1/2 sendok teh garam dapur). Hindari kecap, saus, dan makanan kaleng.`;
-      } else if (
-        query.includes("purin") ||
-        query.includes("asam urat") ||
-        query.includes("nyeri") ||
-        query.includes("sendi")
-      ) {
-        replyText = `Kadar asam urat Anda adalah ${uricAcid} mg/dL. Hindari makanan tinggi purin seperti emping, jeroan, bayam, dan kangkung. Tingkatkan konsumsi air mineral minimal 3 liter per hari untuk memperlancar ekskresi asam urat.`;
-      } else if (
-        query.includes("minum") ||
-        query.includes("air") ||
-        query.includes("cairan")
-      ) {
-        replyText = `Batas cairan harian Anda adalah ${finalRecs.fluid} ml. Ini termasuk air minum, kuah sup, dan cairan dari makanan. Pastikan mencatat setiap gelas air yang Anda konsumsi.`;
-      }
-
-      const replyMsg: ChatMessage = {
-        id: (Date.now() + 1).toString(),
-        sender: "ai",
-        text: replyText,
-        timestamp: new Date().toLocaleTimeString("id-ID", {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-      };
-      setChatMessages((prev) => [...prev, replyMsg]);
-    }, 1200);
-  };
-
   return (
     <div className="min-h-screen bg-[#fafafa] dark:bg-[#09090b] text-foreground flex flex-col font-sans">
       {/* Top Navbar */}
@@ -372,12 +293,6 @@ function SelfCareDashboardContent() {
               className={`px-3 py-1.5 text-xs font-mono rounded whitespace-nowrap ${activeTab === "monitoring" ? "bg-primary text-primary-foreground font-bold" : "text-zinc-600"}`}
             >
               4. Log &amp; Progres
-            </button>
-            <button
-              onClick={() => setActiveTab("ai-assistant")}
-              className={`px-3 py-1.5 text-xs font-mono rounded whitespace-nowrap ${activeTab === "ai-assistant" ? "bg-primary text-primary-foreground font-bold" : "text-zinc-600"}`}
-            >
-              5. AI Gizi
             </button>
           </div>
         </div>
@@ -934,53 +849,6 @@ function SelfCareDashboardContent() {
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          )}
-
-          {/* LANGKAH 5: AI GIZI ASSISTANT SIMULATOR */}
-          {activeTab === "ai-assistant" && (
-            <div className="space-y-6">
-              <div>
-                <h3 className="font-display font-bold text-lg border-b border-zinc-100 dark:border-zinc-900 pb-2 mb-4">
-                  Langkah 5: Konsultasi AI Gizi Assistant
-                </h3>
-                <p className="text-xs text-zinc-500 mb-4">
-                  Konsultasikan bahan makanan, resep gizi, atau pertanyaan diet
-                  klinis Anda dengan asisten AI:
-                </p>
-
-                {/* Chat messages */}
-                <div className="h-64 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/30 p-4 rounded overflow-y-auto space-y-3">
-                  {chatMessages.map((msg) => (
-                    <div
-                      key={msg.id}
-                      className={`max-w-[85%] p-3 rounded text-xs leading-relaxed ${msg.sender === "user" ? "bg-zinc-900 text-white dark:bg-white dark:text-black ml-auto" : "bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 mr-auto"}`}
-                    >
-                      <p>{msg.text}</p>
-                      <span className="text-[8px] font-mono text-zinc-400 block mt-1 text-right">
-                        {msg.timestamp}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Chat input */}
-                <form onSubmit={handleSendMessage} className="flex gap-2">
-                  <input
-                    type="text"
-                    placeholder="Tanyakan hal gizi (Contoh: Bolehkan saya makan daging sapi?)..."
-                    value={typedMessage}
-                    onChange={(e) => setTypedMessage(e.target.value)}
-                    className="flex-1 px-3 py-2 text-xs bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded focus:outline-none"
-                  />
-                  <button
-                    type="submit"
-                    className="px-4 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-black text-xs font-mono hover:bg-zinc-800 transition-colors rounded"
-                  >
-                    KIRIM
-                  </button>
-                </form>
               </div>
             </div>
           )}
