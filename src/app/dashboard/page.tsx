@@ -226,7 +226,7 @@ function SelfCareDashboardContent() {
       </header>
 
       {/* Main Container */}
-      <main className="max-w-4xl w-full mx-auto p-4 md:p-6 space-y-6">
+      <main className="max-w-7xl w-full mx-auto p-4 md:p-6 space-y-6">
         <div className="relative border border-red-200 bg-red-50/20 dark:border-red-950/20 dark:bg-red-950/5 p-6 font-mono text-[11px] leading-relaxed rounded-lg overflow-hidden">
           <div className="absolute top-0 left-0 bottom-0 w-1.5 bg-red-600 dark:bg-red-500"></div>
           <div className="flex gap-4 items-start">
@@ -253,57 +253,230 @@ function SelfCareDashboardContent() {
           </div>
         </div>
 
-        {/* User Profile Configurator Header */}
-        <div className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 p-6 rounded-lg shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <div>
-            <div className="flex items-center gap-3 mb-1">
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="font-display text-2xl font-bold bg-transparent border-b border-transparent hover:border-zinc-300 focus:border-zinc-950 focus:outline-none dark:focus:border-white"
-              />
-              <span className="text-[9px] font-mono border border-zinc-300 dark:border-zinc-700 px-2 py-0.5 text-zinc-400 rounded uppercase">
-                {diseaseType === "none" ? "UMUM" : diseaseType}
-              </span>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          {/* Left Column: Persistent Clinical Profile Sidebar */}
+          <aside className="lg:col-span-4 lg:sticky lg:top-6 space-y-6">
+            <div className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg shadow-sm overflow-hidden">
+              {/* Medical Header Style */}
+              <div className="bg-zinc-950 dark:bg-zinc-900 text-white p-4 font-mono text-[10px] uppercase tracking-wider flex justify-between items-center">
+                <span>KARTU PROFIL PASIEN</span>
+                <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
+              </div>
+              <div className="p-5 space-y-5">
+                {/* Name & Focus Diet */}
+                <div>
+                  <label className="text-[9px] font-mono block text-zinc-400 mb-0.5 uppercase tracking-wider">
+                    Nama Pasien / User
+                  </label>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="w-full font-display text-xl font-bold bg-transparent border-b border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 focus:border-zinc-950 focus:outline-none dark:focus:border-white py-0.5 transition-colors"
+                  />
+                  <div className="mt-2 flex items-center gap-1.5">
+                    <span className="text-[9px] font-mono bg-zinc-100 dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 px-2 py-0.5 text-zinc-600 dark:text-zinc-400 rounded uppercase font-bold tracking-tight">
+                      {diseaseType === "none"
+                        ? "Sehat Mandiri"
+                        : diseaseType === "kidney"
+                          ? "Gagal Ginjal Kronis"
+                          : diseaseType === "hypertension"
+                            ? "Hipertensi"
+                            : diseaseType === "gout"
+                              ? "Asam Urat"
+                              : diseaseType}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Vital Anthropometrics & Calculations */}
+                <div className="border-t border-zinc-100 dark:border-zinc-900 pt-4 space-y-3">
+                  <h4 className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">
+                    Indikator Antropometri
+                  </h4>
+                  <div className="grid grid-cols-3 gap-2">
+                    <div className="p-2.5 bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-100 dark:border-zinc-900 rounded">
+                      <div className="text-[8px] font-mono text-zinc-400">IMT</div>
+                      <div className="text-sm font-mono font-bold mt-0.5">
+                        {bmi}
+                      </div>
+                      <div className="text-[8px] font-mono mt-0.5 text-zinc-500 overflow-hidden text-ellipsis whitespace-nowrap">
+                        {bmiCategory.split(" ")[0]}
+                      </div>
+                    </div>
+                    <div className="p-2.5 bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-100 dark:border-zinc-900 rounded">
+                      <div className="text-[8px] font-mono text-zinc-400">BBI</div>
+                      <div className="text-sm font-mono font-bold mt-0.5">
+                        {bbi.toFixed(1)}
+                        <span className="text-[9px] font-normal text-zinc-400 ml-0.5">kg</span>
+                      </div>
+                      <div className="text-[8px] font-mono mt-0.5 text-zinc-500">
+                        Berat Ideal
+                      </div>
+                    </div>
+                    <div className="p-2.5 bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-100 dark:border-zinc-900 rounded">
+                      <div className="text-[8px] font-mono text-zinc-400">TEE</div>
+                      <div className="text-sm font-mono font-bold mt-0.5">
+                        {tee}
+                        <span className="text-[9px] font-normal text-zinc-400 ml-0.5">kcal</span>
+                      </div>
+                      <div className="text-[8px] font-mono mt-0.5 text-zinc-500">
+                        Target Energi
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Dynamic Clinical Targets */}
+                <div className="border-t border-zinc-100 dark:border-zinc-900 pt-4 space-y-2.5">
+                  <h4 className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">
+                    Target Zat Gizi Harian
+                  </h4>
+                  <div className="space-y-1.5 font-mono text-xs">
+                    <div className="flex justify-between py-1 border-b border-dashed border-zinc-100 dark:border-zinc-900">
+                      <span className="text-zinc-500">Energi</span>
+                      <span className="font-bold">{tee} kcal</span>
+                    </div>
+                    <div className="flex justify-between py-1 border-b border-dashed border-zinc-100 dark:border-zinc-900">
+                      <span className="text-zinc-500">Protein</span>
+                      <span className="font-bold">{finalRecs.protein.toFixed(1)} g</span>
+                    </div>
+                    <div className="flex justify-between py-1 border-b border-dashed border-zinc-100 dark:border-zinc-900">
+                      <span className="text-zinc-500">Natrium</span>
+                      <span className="font-bold">&lt;{finalRecs.sodium} mg</span>
+                    </div>
+                    {diseaseType === "kidney" && (
+                      <div className="flex justify-between py-1 border-b border-dashed border-zinc-100 dark:border-zinc-900">
+                        <span className="text-zinc-500">Kalium</span>
+                        <span className="font-bold">
+                          {finalRecs.potassium !== null ? `${finalRecs.potassium} mg` : "-"}
+                        </span>
+                      </div>
+                    )}
+                    <div className="flex justify-between py-1 border-b border-dashed border-zinc-100 dark:border-zinc-900">
+                      <span className="text-zinc-500">Cairan</span>
+                      <span className="font-bold">
+                        {finalRecs.fluid !== null ? `${finalRecs.fluid} mL` : "Kebutuhan normal"}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Real-time Nutrition Tracker Card */}
+                <div className="border-t border-zinc-100 dark:border-zinc-900 pt-4 space-y-3">
+                  <div className="flex justify-between items-center">
+                    <h4 className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">
+                      Asupan Hari Ini
+                    </h4>
+                    <span className="text-[8px] font-mono px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-500">
+                      LIVE TRACKER
+                    </span>
+                  </div>
+                  <div className="space-y-2.5">
+                    {/* Calories Progress */}
+                    <div>
+                      <div className="flex justify-between text-[10px] font-mono mb-1">
+                        <span className="text-zinc-500">Energi</span>
+                        <span className="font-bold">
+                          {totalCalories} / {tee} kcal
+                        </span>
+                      </div>
+                      <div className="h-1.5 bg-zinc-100 dark:bg-zinc-900 rounded-full overflow-hidden">
+                        <div
+                          className={`h-full ${totalCalories > tee ? "bg-red-500 animate-pulse" : "bg-zinc-800 dark:bg-zinc-200"}`}
+                          style={{
+                            width: `${Math.min((totalCalories / tee) * 100, 100)}%`,
+                          }}
+                        ></div>
+                      </div>
+                    </div>
+                    {/* Protein Progress */}
+                    <div>
+                      <div className="flex justify-between text-[10px] font-mono mb-1">
+                        <span className="text-zinc-500">Protein</span>
+                        <span className="font-bold">
+                          {totalProtein.toFixed(1)} / {finalRecs.protein.toFixed(1)} g
+                        </span>
+                      </div>
+                      <div className="h-1.5 bg-zinc-100 dark:bg-zinc-900 rounded-full overflow-hidden">
+                        <div
+                          className={`h-full ${
+                            diseaseType === "kidney" && totalProtein > finalRecs.protein
+                              ? "bg-red-500 animate-pulse"
+                              : "bg-zinc-800 dark:bg-zinc-200"
+                          }`}
+                          style={{
+                            width: `${Math.min((totalProtein / finalRecs.protein) * 100, 100)}%`,
+                          }}
+                        ></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <p className="text-xs text-zinc-500 font-mono">
-              BBI: {bbi.toFixed(1)} kg • IMT: {bmi} ({bmiCategory.split(" ")[0]}
-              ) • Target TEE harian: {tee} kcal
-            </p>
-          </div>
+          </aside>
 
-          {/* Stepper Navigation */}
-          <div className="flex items-center gap-1.5 border border-zinc-200 dark:border-zinc-800 p-1 bg-zinc-50 dark:bg-zinc-900 rounded-lg overflow-x-auto max-w-full">
-            <button
-              onClick={() => setActiveTab("assessment")}
-              className={`px-3 py-1.5 text-xs font-mono rounded whitespace-nowrap ${activeTab === "assessment" ? "bg-primary text-primary-foreground font-bold" : "text-zinc-600"}`}
-            >
-              1. Asesmen
-            </button>
-            <button
-              onClick={() => setActiveTab("diagnosis")}
-              className={`px-3 py-1.5 text-xs font-mono rounded whitespace-nowrap ${activeTab === "diagnosis" ? "bg-primary text-primary-foreground font-bold" : "text-zinc-600"}`}
-            >
-              2. Diagnosis
-            </button>
-            <button
-              onClick={() => setActiveTab("intervention")}
-              className={`px-3 py-1.5 text-xs font-mono rounded whitespace-nowrap ${activeTab === "intervention" ? "bg-primary text-primary-foreground font-bold" : "text-zinc-600"}`}
-            >
-              3. Rencana Gizi
-            </button>
-            <button
-              onClick={() => setActiveTab("monitoring")}
-              className={`px-3 py-1.5 text-xs font-mono rounded whitespace-nowrap ${activeTab === "monitoring" ? "bg-primary text-primary-foreground font-bold" : "text-zinc-600"}`}
-            >
-              4. Log &amp; Progres
-            </button>
-          </div>
-        </div>
+          {/* Right Column: Navigation and Step Content */}
+          <div className="lg:col-span-8 space-y-6">
+            {/* Stepper Navigation */}
+            <div className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 p-4 rounded-lg shadow-sm">
+              <div className="flex flex-wrap items-center gap-1.5 border border-zinc-200 dark:border-zinc-800 p-1 bg-zinc-50 dark:bg-zinc-900 rounded-lg w-full">
+                <button
+                  onClick={() => setActiveTab("assessment")}
+                  className={`flex-1 min-w-[100px] px-3 py-1.5 text-xs font-mono rounded transition-colors text-center ${
+                    activeTab === "assessment"
+                      ? "bg-primary text-primary-foreground font-bold"
+                      : "text-zinc-600 hover:bg-zinc-100 dark:hover:bg-zinc-900"
+                  }`}
+                >
+                  1. Asesmen
+                </button>
+                <button
+                  onClick={() => setActiveTab("diagnosis")}
+                  className={`flex-1 min-w-[100px] px-3 py-1.5 text-xs font-mono rounded transition-colors text-center ${
+                    activeTab === "diagnosis"
+                      ? "bg-primary text-primary-foreground font-bold"
+                      : "text-zinc-600 hover:bg-zinc-100 dark:hover:bg-zinc-900"
+                  }`}
+                >
+                  2. Diagnosis
+                </button>
+                <button
+                  onClick={() => setActiveTab("intervention")}
+                  className={`flex-1 min-w-[100px] px-3 py-1.5 text-xs font-mono rounded transition-colors text-center ${
+                    activeTab === "intervention"
+                      ? "bg-primary text-primary-foreground font-bold"
+                      : "text-zinc-600 hover:bg-zinc-100 dark:hover:bg-zinc-900"
+                  }`}
+                >
+                  3. Rencana Gizi
+                </button>
+                <button
+                  onClick={() => setActiveTab("monitoring")}
+                  className={`flex-1 min-w-[100px] px-3 py-1.5 text-xs font-mono rounded transition-colors text-center ${
+                    activeTab === "monitoring"
+                      ? "bg-primary text-primary-foreground font-bold"
+                      : "text-zinc-600 hover:bg-zinc-100 dark:hover:bg-zinc-900"
+                  }`}
+                >
+                  4. Log &amp; Progres
+                </button>
+                <button
+                  onClick={() => setActiveTab("ai-assistant")}
+                  className={`flex-1 min-w-[100px] px-3 py-1.5 text-xs font-mono rounded transition-colors text-center ${
+                    activeTab === "ai-assistant"
+                      ? "bg-primary text-primary-foreground font-bold"
+                      : "text-zinc-600 hover:bg-zinc-100 dark:hover:bg-zinc-900"
+                  }`}
+                >
+                  5. AI Gizi
+                </button>
+              </div>
+            </div>
 
-        {/* Tab Workspace */}
-        <div className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 p-6 md:p-8 rounded-lg shadow-sm">
+            {/* Tab Workspace */}
+            <div className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 p-6 md:p-8 rounded-lg shadow-sm">
           {/* LANGKAH 1: ASESMEN MANDIRI */}
           {activeTab === "assessment" && (
             <div className="space-y-6">
@@ -855,8 +1028,10 @@ function SelfCareDashboardContent() {
             </div>
           )}
         </div>
-      </main>
+      </div>
     </div>
+  </main>
+</div>
   );
 }
 
