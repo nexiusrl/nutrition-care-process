@@ -83,48 +83,6 @@ export default function Home() {
               </Link>
             </div>
           </div>
-          <div className="lg:col-span-4 hidden lg:block border border-dashed border-zinc-300 dark:border-zinc-700 p-6 bg-zinc-50 dark:bg-zinc-950 font-mono text-xs">
-            <div className="flex justify-between pb-3 border-b border-zinc-200 dark:border-zinc-800 mb-3">
-              <span className="text-zinc-400">STATUS KONSOL</span>
-              <span className="text-zinc-900 dark:text-zinc-100 font-bold">
-                CLIENT-ONLY
-              </span>
-            </div>
-            <div className="space-y-2 text-zinc-600 dark:text-zinc-400">
-              <p>
-                <span className="text-zinc-900 dark:text-zinc-100 font-semibold">
-                  FORMULA:
-                </span>{" "}
-                Harris-Benedict (rev)
-              </p>
-              <p>
-                <span className="text-zinc-900 dark:text-zinc-100 font-semibold">
-                  STANDARD:
-                </span>{" "}
-                PAGT Kemenkes RI
-              </p>
-              <p>
-                <span className="text-zinc-900 dark:text-zinc-100 font-semibold">
-                  AUTO-INFERENCE:
-                </span>{" "}
-                eGFR, BP, Uric Acid
-              </p>
-              <p>
-                <span className="text-zinc-900 dark:text-zinc-100 font-semibold">
-                  OUTPUT:
-                </span>{" "}
-                PDF Leaflet &amp; Daily Tracker
-              </p>
-            </div>
-            <div className="mt-6 p-3 bg-zinc-900 text-zinc-100 rounded">
-              <span className="text-[10px] text-zinc-400 block mb-1">
-                SECURITY LOG
-              </span>
-              <p className="font-bold text-emerald-500">
-                RLS CONSTRAINED BY USER ID
-              </p>
-            </div>
-          </div>
         </div>
       </section>
 
