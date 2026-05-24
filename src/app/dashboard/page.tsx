@@ -1,22 +1,22 @@
-'use client';
+"use client";
 
-import { useState, useEffect, Suspense } from 'react';
-import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-import { 
-  calculateBBI, 
-  calculateBMI, 
-  getBMICategory, 
-  calculateBMR, 
-  calculateTEE, 
+import { useState, useEffect, Suspense } from "react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import {
+  calculateBBI,
+  calculateBMI,
+  getBMICategory,
+  calculateBMR,
+  calculateTEE,
   getNutrientRecommendations,
   LabData,
-  NutrientRecommendations
-} from '@/utils/nutritionCalculations';
+  NutrientRecommendations,
+} from "@/utils/nutritionCalculations";
 
 interface ChatMessage {
   id: string;
-  sender: 'user' | 'ai';
+  sender: "user" | "ai";
   text: string;
   timestamp: string;
 }
@@ -31,16 +31,19 @@ interface FoodLog {
 
 function SelfCareDashboardContent() {
   const searchParams = useSearchParams();
-  const initialMode = searchParams.get('mode') === 'independent' ? 'none' : 'kidney';
+  const initialMode =
+    searchParams.get("mode") === "independent" ? "none" : "kidney";
 
   // State for user clinical parameters
-  const [name, setName] = useState('Budi Santoso');
+  const [name, setName] = useState("Budi Santoso");
   const [age, setAge] = useState(58);
-  const [gender, setGender] = useState<'male' | 'female'>('male');
+  const [gender, setGender] = useState<"male" | "female">("male");
   const [height, setHeight] = useState(165);
   const [weight, setWeight] = useState(68);
-  const [diseaseType, setDiseaseType] = useState<'kidney' | 'hypertension' | 'gout' | 'none'>(initialMode as any);
-  
+  const [diseaseType, setDiseaseType] = useState<
+    "kidney" | "hypertension" | "gout" | "none"
+  >(initialMode as any);
+
   // Lab parameters
   const [eGFR, seteGFR] = useState<number | undefined>(45);
   const [bpSystolic, setBpSystolic] = useState<number | undefined>(135);
@@ -48,7 +51,9 @@ function SelfCareDashboardContent() {
   const [uricAcid, setUricAcid] = useState<number | undefined>(6.8);
   const [serumPotassium, setSerumPotassium] = useState<number | undefined>(5.4);
 
-  const [activeTab, setActiveTab] = useState<'assessment' | 'diagnosis' | 'intervention' | 'monitoring' | 'ai-assistant'>('assessment');
+  const [activeTab, setActiveTab] = useState<
+    "assessment" | "diagnosis" | "intervention" | "monitoring" | "ai-assistant"
+  >("assessment");
 
   // Custom targets (Overrides)
   const [customProtein, setCustomProtein] = useState<number | null>(null);
@@ -62,19 +67,31 @@ function SelfCareDashboardContent() {
   const bmi = calculateBMI(weight, height);
   const bmiCategory = getBMICategory(bmi);
   const bmr = calculateBMR(weight, height, age, gender);
-  
+
   const activityFactor = 1.2; // Ringan
-  const stressFactor = diseaseType === 'kidney' ? 1.25 : diseaseType === 'hypertension' ? 1.15 : 1.1;
+  const stressFactor =
+    diseaseType === "kidney"
+      ? 1.25
+      : diseaseType === "hypertension"
+        ? 1.15
+        : 1.1;
   const tee = calculateTEE(bmr, activityFactor, stressFactor);
 
-  const labData: LabData = { eGFR, bpSystolic, bpDiastolic, uricAcid, serumPotassium };
+  const labData: LabData = {
+    eGFR,
+    bpSystolic,
+    bpDiastolic,
+    uricAcid,
+    serumPotassium,
+  };
   const defaultRecs = getNutrientRecommendations(diseaseType, bbi, labData);
 
   const finalRecs: NutrientRecommendations = {
     ...defaultRecs,
     protein: customProtein !== null ? customProtein : defaultRecs.protein,
     sodium: customSodium !== null ? customSodium : defaultRecs.sodium,
-    potassium: customPotassium !== null ? customPotassium : defaultRecs.potassium,
+    potassium:
+      customPotassium !== null ? customPotassium : defaultRecs.potassium,
     fluid: customFluid !== null ? customFluid : defaultRecs.fluid,
   };
 
@@ -90,32 +107,34 @@ function SelfCareDashboardContent() {
   // Automated PES Diagnosis
   const generatePES = () => {
     const statements: string[] = [];
-    if (diseaseType === 'kidney' && eGFR !== undefined && eGFR < 60) {
+    if (diseaseType === "kidney" && eGFR !== undefined && eGFR < 60) {
       statements.push(
-        `[P] Penurunan fungsi filtrasi ginjal berkaitan dengan [E] patologi ginjal kronis ditandai dengan [S] eGFR Anda berada di angka ${eGFR} mL/min/1.73m² (Stadium 3+).`
+        `[P] Penurunan fungsi filtrasi ginjal berkaitan dengan [E] patologi ginjal kronis ditandai dengan [S] eGFR Anda berada di angka ${eGFR} mL/min/1.73m² (Stadium 3+).`,
       );
       if (serumPotassium !== undefined && serumPotassium > 5.0) {
         statements.push(
-          `[P] Risiko hiperkalemia berkaitan dengan [E] ekskresi kalium ginjal menurun ditandai dengan [S] kadar kalium darah tinggi (${serumPotassium} mEq/L).`
+          `[P] Risiko hiperkalemia berkaitan dengan [E] ekskresi kalium ginjal menurun ditandai dengan [S] kadar kalium darah tinggi (${serumPotassium} mEq/L).`,
         );
       }
     }
-    if (diseaseType === 'hypertension') {
+    if (diseaseType === "hypertension") {
       if (bpSystolic !== undefined && bpSystolic >= 140) {
         statements.push(
-          `[P] Tekanan darah tidak terkontrol berkaitan dengan [E] beban cairan vaskular tinggi/hipertensi ditandai dengan [S] tekanan darah sistolik ${bpSystolic} mmHg.`
+          `[P] Tekanan darah tidak terkontrol berkaitan dengan [E] beban cairan vaskular tinggi/hipertensi ditandai dengan [S] tekanan darah sistolik ${bpSystolic} mmHg.`,
         );
       }
     }
-    if (diseaseType === 'gout') {
+    if (diseaseType === "gout") {
       if (uricAcid !== undefined && uricAcid > 7.0) {
         statements.push(
-          `[P] Gangguan eliminasi asam urat berkaitan dengan [E] asupan makanan tinggi purin ditandai dengan [S] kadar asam urat darah tinggi (${uricAcid} mg/dL).`
+          `[P] Gangguan eliminasi asam urat berkaitan dengan [E] asupan makanan tinggi purin ditandai dengan [S] kadar asam urat darah tinggi (${uricAcid} mg/dL).`,
         );
       }
     }
     if (statements.length === 0) {
-      statements.push("Status gizi Anda dalam batas normal/rumatan. Tidak terdeteksi anomali klinis kritis.");
+      statements.push(
+        "Status gizi Anda dalam batas normal/rumatan. Tidak terdeteksi anomali klinis kritis.",
+      );
     }
     return statements;
   };
@@ -124,13 +143,25 @@ function SelfCareDashboardContent() {
 
   // Food Log State
   const [logs, setLogs] = useState<FoodLog[]>([
-    { id: '1', food: 'Nasi putih (100g) + Pepes tahu (50g)', calories: 280, protein: 8, sodium: 90 },
-    { id: '2', food: 'Putih telur rebus (2 butir)', calories: 100, protein: 12, sodium: 120 }
+    {
+      id: "1",
+      food: "Nasi putih (100g) + Pepes tahu (50g)",
+      calories: 280,
+      protein: 8,
+      sodium: 90,
+    },
+    {
+      id: "2",
+      food: "Putih telur rebus (2 butir)",
+      calories: 100,
+      protein: 12,
+      sodium: 120,
+    },
   ]);
-  const [newFood, setNewFood] = useState('');
-  const [newCal, setNewCal] = useState('');
-  const [newProtein, setNewProtein] = useState('');
-  const [newSodium, setNewSodium] = useState('');
+  const [newFood, setNewFood] = useState("");
+  const [newCal, setNewCal] = useState("");
+  const [newProtein, setNewProtein] = useState("");
+  const [newSodium, setNewSodium] = useState("");
 
   const handleAddLog = (e: React.FormEvent) => {
     e.preventDefault();
@@ -145,18 +176,18 @@ function SelfCareDashboardContent() {
       food: newFood,
       calories: parsedCal,
       protein: parsedProtein,
-      sodium: parsedSodium
+      sodium: parsedSodium,
     };
 
     setLogs([...logs, newLog]);
-    setNewFood('');
-    setNewCal('');
-    setNewProtein('');
-    setNewSodium('');
+    setNewFood("");
+    setNewCal("");
+    setNewProtein("");
+    setNewSodium("");
   };
 
   const handleDeleteLog = (id: string) => {
-    setLogs(logs.filter(l => l.id !== id));
+    setLogs(logs.filter((l) => l.id !== id));
   };
 
   const totalCalories = logs.reduce((acc, curr) => acc + curr.calories, 0);
@@ -165,9 +196,14 @@ function SelfCareDashboardContent() {
 
   // Chat State
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
-    { id: '1', sender: 'ai', text: 'Halo! Saya AI Gizi Assistant. Saya dapat membantu memberikan rekomendasi diet mandiri berdasarkan parameter tubuh dan penyakit Anda. Ada yang ingin Anda tanyakan?', timestamp: '08:00' }
+    {
+      id: "1",
+      sender: "ai",
+      text: "Halo! Saya AI Gizi Assistant. Saya dapat membantu memberikan rekomendasi diet mandiri berdasarkan parameter tubuh dan penyakit Anda. Ada yang ingin Anda tanyakan?",
+      timestamp: "08:00",
+    },
   ]);
-  const [typedMessage, setTypedMessage] = useState('');
+  const [typedMessage, setTypedMessage] = useState("");
 
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
@@ -175,40 +211,65 @@ function SelfCareDashboardContent() {
 
     const userMsg: ChatMessage = {
       id: Date.now().toString(),
-      sender: 'user',
+      sender: "user",
       text: typedMessage,
-      timestamp: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
+      timestamp: new Date().toLocaleTimeString("id-ID", {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
     };
 
-    setChatMessages(prev => [...prev, userMsg]);
-    setTypedMessage('');
+    setChatMessages((prev) => [...prev, userMsg]);
+    setTypedMessage("");
 
     // Generate smart contextual AI reply
     setTimeout(() => {
-      let replyText = 'Pesan Anda diterima. Harap pastikan asupan gizi harian Anda tidak melebihi batas target.';
+      let replyText =
+        "Pesan Anda diterima. Harap pastikan asupan gizi harian Anda tidak melebihi batas target.";
       const query = typedMessage.toLowerCase();
-      
-      if (query.includes('protein') || query.includes('telur') || query.includes('daging')) {
-        if (diseaseType === 'kidney') {
+
+      if (
+        query.includes("protein") ||
+        query.includes("telur") ||
+        query.includes("daging")
+      ) {
+        if (diseaseType === "kidney") {
           replyText = `Karena Anda memilih modul Ginjal (eGFR: ${eGFR}), target protein Anda dibatasi ketat sebesar ${finalRecs.protein}g. Batasi daging merah dan jeroan, pilih protein bernilai biologi tinggi seperti putih telur dalam batas wajar.`;
         } else {
           replyText = `Kebutuhan protein ideal Anda adalah ${finalRecs.protein}g per hari. Sangat baik untuk menjaga kebugaran otot.`;
         }
-      } else if (query.includes('garam') || query.includes('asin') || query.includes('tensi') || query.includes('hipertensi')) {
+      } else if (
+        query.includes("garam") ||
+        query.includes("asin") ||
+        query.includes("tensi") ||
+        query.includes("hipertensi")
+      ) {
         replyText = `Untuk menjaga tekanan darah Anda (Sistolik: ${bpSystolic} mmHg), batasi konsumsi garam maksimal ${finalRecs.sodium}mg natrium per hari (setara 1/2 sendok teh garam dapur). Hindari kecap, saus, dan makanan kaleng.`;
-      } else if (query.includes('purin') || query.includes('asam urat') || query.includes('nyeri') || query.includes('sendi')) {
+      } else if (
+        query.includes("purin") ||
+        query.includes("asam urat") ||
+        query.includes("nyeri") ||
+        query.includes("sendi")
+      ) {
         replyText = `Kadar asam urat Anda adalah ${uricAcid} mg/dL. Hindari makanan tinggi purin seperti emping, jeroan, bayam, dan kangkung. Tingkatkan konsumsi air mineral minimal 3 liter per hari untuk memperlancar ekskresi asam urat.`;
-      } else if (query.includes('minum') || query.includes('air') || query.includes('cairan')) {
+      } else if (
+        query.includes("minum") ||
+        query.includes("air") ||
+        query.includes("cairan")
+      ) {
         replyText = `Batas cairan harian Anda adalah ${finalRecs.fluid} ml. Ini termasuk air minum, kuah sup, dan cairan dari makanan. Pastikan mencatat setiap gelas air yang Anda konsumsi.`;
       }
 
       const replyMsg: ChatMessage = {
         id: (Date.now() + 1).toString(),
-        sender: 'ai',
+        sender: "ai",
         text: replyText,
-        timestamp: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
+        timestamp: new Date().toLocaleTimeString("id-ID", {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
       };
-      setChatMessages(prev => [...prev, replyMsg]);
+      setChatMessages((prev) => [...prev, replyMsg]);
     }, 1200);
   };
 
@@ -217,24 +278,43 @@ function SelfCareDashboardContent() {
       {/* Top Navbar */}
       <header className="border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 px-6 h-16 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Link href="/" className="h-6 w-6 bg-zinc-900 dark:bg-zinc-100 flex items-center justify-center text-white dark:text-black font-display font-bold text-xs">
+          <Link
+            href="/"
+            className="h-6 w-6 bg-zinc-900 dark:bg-zinc-100 flex items-center justify-center text-white dark:text-black font-display font-bold text-xs"
+          >
             N
           </Link>
-          <span className="font-display font-bold tracking-tight">KONSOL ASUHAN GIZI MANDIRI</span>
+          <span className="font-display font-bold tracking-tight">
+            KONSOL ASUHAN GIZI MANDIRI
+          </span>
           <span className="text-[10px] font-mono border border-zinc-300 dark:border-zinc-700 px-1.5 py-0.5 rounded text-zinc-500">
             CLIENT SIDE CONSOLE
           </span>
         </div>
-        <Link href="/" className="text-xs font-mono text-zinc-400 hover:text-foreground">Keluar</Link>
+        <Link
+          href="/"
+          className="text-xs font-mono text-zinc-400 hover:text-foreground"
+        >
+          Keluar
+        </Link>
       </header>
 
       {/* Main Container */}
       <main className="max-w-4xl w-full mx-auto p-4 md:p-6 space-y-6">
         {/* Medical Disclaimer Banner */}
         <div className="border border-red-200 bg-red-50 dark:border-red-950/50 dark:bg-red-950/20 p-4 text-red-800 dark:text-red-300 text-xs rounded-lg space-y-1">
-          <p className="font-bold">// MEDICAL DISCLAIMER &amp; PERNYATAAN KESELAMATAN</p>
+          <p className="font-bold">
+            // MEDICAL DISCLAIMER &amp; PERNYATAAN KESELAMATAN
+          </p>
           <p className="leading-relaxed">
-            Hasil perhitungan gizi, target zat gizi makro/mikro, serta saran gizi otomatis (PES Statement) yang dihasilkan oleh aplikasi ini didasarkan pada standar asuhan PAGT Kemenkes RI secara komputasional. Konsol ini berfungsi sebagai alat bantu simulasi edukasi gizi mandiri dan <strong>bukan pengganti konsultasi medis profesional</strong>. Konsultasikan pola makan Anda dengan dokter atau dietisien sebelum memulai perubahan diet radikal.
+            Hasil perhitungan gizi, target zat gizi makro/mikro, serta saran
+            gizi otomatis (PES Statement) yang dihasilkan oleh aplikasi ini
+            didasarkan pada standar asuhan PAGT Kemenkes RI secara
+            komputasional. Konsol ini berfungsi sebagai alat bantu simulasi
+            edukasi gizi mandiri dan{" "}
+            <strong>bukan pengganti konsultasi medis profesional</strong>.
+            Konsultasikan pola makan Anda dengan dokter atau dietisien sebelum
+            memulai perubahan diet radikal.
           </p>
         </div>
 
@@ -249,43 +329,44 @@ function SelfCareDashboardContent() {
                 className="font-display text-2xl font-bold bg-transparent border-b border-transparent hover:border-zinc-300 focus:border-zinc-950 focus:outline-none dark:focus:border-white"
               />
               <span className="text-[9px] font-mono border border-zinc-300 dark:border-zinc-700 px-2 py-0.5 text-zinc-400 rounded uppercase">
-                {diseaseType === 'none' ? 'UMUM' : diseaseType}
+                {diseaseType === "none" ? "UMUM" : diseaseType}
               </span>
             </div>
             <p className="text-xs text-zinc-500 font-mono">
-              BBI: {bbi.toFixed(1)} kg • IMT: {bmi} ({bmiCategory.split(' ')[0]}) • Target TEE harian: {tee} kcal
+              BBI: {bbi.toFixed(1)} kg • IMT: {bmi} ({bmiCategory.split(" ")[0]}
+              ) • Target TEE harian: {tee} kcal
             </p>
           </div>
 
           {/* Stepper Navigation */}
           <div className="flex items-center gap-1.5 border border-zinc-200 dark:border-zinc-800 p-1 bg-zinc-50 dark:bg-zinc-900 rounded-lg overflow-x-auto max-w-full">
             <button
-              onClick={() => setActiveTab('assessment')}
-              className={`px-3 py-1.5 text-xs font-mono rounded whitespace-nowrap ${activeTab === 'assessment' ? 'bg-primary text-primary-foreground font-bold' : 'text-zinc-600'}`}
+              onClick={() => setActiveTab("assessment")}
+              className={`px-3 py-1.5 text-xs font-mono rounded whitespace-nowrap ${activeTab === "assessment" ? "bg-primary text-primary-foreground font-bold" : "text-zinc-600"}`}
             >
               1. Asesmen
             </button>
             <button
-              onClick={() => setActiveTab('diagnosis')}
-              className={`px-3 py-1.5 text-xs font-mono rounded whitespace-nowrap ${activeTab === 'diagnosis' ? 'bg-primary text-primary-foreground font-bold' : 'text-zinc-600'}`}
+              onClick={() => setActiveTab("diagnosis")}
+              className={`px-3 py-1.5 text-xs font-mono rounded whitespace-nowrap ${activeTab === "diagnosis" ? "bg-primary text-primary-foreground font-bold" : "text-zinc-600"}`}
             >
               2. Diagnosis
             </button>
             <button
-              onClick={() => setActiveTab('intervention')}
-              className={`px-3 py-1.5 text-xs font-mono rounded whitespace-nowrap ${activeTab === 'intervention' ? 'bg-primary text-primary-foreground font-bold' : 'text-zinc-600'}`}
+              onClick={() => setActiveTab("intervention")}
+              className={`px-3 py-1.5 text-xs font-mono rounded whitespace-nowrap ${activeTab === "intervention" ? "bg-primary text-primary-foreground font-bold" : "text-zinc-600"}`}
             >
               3. Rencana Gizi
             </button>
             <button
-              onClick={() => setActiveTab('monitoring')}
-              className={`px-3 py-1.5 text-xs font-mono rounded whitespace-nowrap ${activeTab === 'monitoring' ? 'bg-primary text-primary-foreground font-bold' : 'text-zinc-600'}`}
+              onClick={() => setActiveTab("monitoring")}
+              className={`px-3 py-1.5 text-xs font-mono rounded whitespace-nowrap ${activeTab === "monitoring" ? "bg-primary text-primary-foreground font-bold" : "text-zinc-600"}`}
             >
               4. Log &amp; Progres
             </button>
             <button
-              onClick={() => setActiveTab('ai-assistant')}
-              className={`px-3 py-1.5 text-xs font-mono rounded whitespace-nowrap ${activeTab === 'ai-assistant' ? 'bg-primary text-primary-foreground font-bold' : 'text-zinc-600'}`}
+              onClick={() => setActiveTab("ai-assistant")}
+              className={`px-3 py-1.5 text-xs font-mono rounded whitespace-nowrap ${activeTab === "ai-assistant" ? "bg-primary text-primary-foreground font-bold" : "text-zinc-600"}`}
             >
               5. AI Gizi
             </button>
@@ -294,18 +375,23 @@ function SelfCareDashboardContent() {
 
         {/* Tab Workspace */}
         <div className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 p-6 md:p-8 rounded-lg shadow-sm">
-          
           {/* LANGKAH 1: ASESMEN MANDIRI */}
-          {activeTab === 'assessment' && (
+          {activeTab === "assessment" && (
             <div className="space-y-6">
               <div>
-                <h3 className="font-display font-bold text-lg border-b border-zinc-100 dark:border-zinc-900 pb-2 mb-4">Langkah 1: Asesmen Gizi Mandiri</h3>
-                
+                <h3 className="font-display font-bold text-lg border-b border-zinc-100 dark:border-zinc-900 pb-2 mb-4">
+                  Langkah 1: Asesmen Gizi Mandiri
+                </h3>
+
                 {/* Antropometri */}
-                <h4 className="font-mono text-xs text-zinc-400 mb-3 uppercase tracking-wider">// 1.1 Data Fisik &amp; Antropometri</h4>
+                <h4 className="font-mono text-xs text-zinc-400 mb-3 uppercase tracking-wider">
+                  // 1.1 Data Fisik &amp; Antropometri
+                </h4>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                   <div>
-                    <label className="text-[9px] font-mono block text-zinc-400 mb-1">TINGGI BADAN (CM)</label>
+                    <label className="text-[9px] font-mono block text-zinc-400 mb-1">
+                      TINGGI BADAN (CM)
+                    </label>
                     <input
                       type="number"
                       value={height}
@@ -314,7 +400,9 @@ function SelfCareDashboardContent() {
                     />
                   </div>
                   <div>
-                    <label className="text-[9px] font-mono block text-zinc-400 mb-1">BERAT BADAN AKTUAL (KG)</label>
+                    <label className="text-[9px] font-mono block text-zinc-400 mb-1">
+                      BERAT BADAN AKTUAL (KG)
+                    </label>
                     <input
                       type="number"
                       value={weight}
@@ -323,7 +411,9 @@ function SelfCareDashboardContent() {
                     />
                   </div>
                   <div>
-                    <label className="text-[9px] font-mono block text-zinc-400 mb-1">UMUR (TAHUN)</label>
+                    <label className="text-[9px] font-mono block text-zinc-400 mb-1">
+                      UMUR (TAHUN)
+                    </label>
                     <input
                       type="number"
                       value={age}
@@ -332,10 +422,14 @@ function SelfCareDashboardContent() {
                     />
                   </div>
                   <div>
-                    <label className="text-[9px] font-mono block text-zinc-400 mb-1">GENDER</label>
+                    <label className="text-[9px] font-mono block text-zinc-400 mb-1">
+                      GENDER
+                    </label>
                     <select
                       value={gender}
-                      onChange={(e) => setGender(e.target.value as 'male' | 'female')}
+                      onChange={(e) =>
+                        setGender(e.target.value as "male" | "female")
+                      }
                       className="w-full px-3 py-2 text-xs font-mono bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded focus:outline-none"
                     >
                       <option value="male">Pria</option>
@@ -345,393 +439,546 @@ function SelfCareDashboardContent() {
                 </div>
 
                 {/* Penyakit & Lab */}
-                <h4 className="font-mono text-xs text-zinc-400 mb-3 uppercase tracking-wider">// 1.2 Kondisi Medis &amp; Hasil Laboratorium</h4>
+                <h4 className="font-mono text-xs text-zinc-400 mb-3 uppercase tracking-wider">
+                  // 1.2 Kondisi Medis &amp; Hasil Laboratorium
+                </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                   <div>
-                    <label className="text-[10px] font-mono block text-zinc-400 mb-1">FOKUS RUMATAN DIET PENYAKIT</label>
+                    <label className="text-[10px] font-mono block text-zinc-400 mb-1">
+                      FOKUS RUMATAN DIET PENYAKIT
+                    </label>
                     <select
                       value={diseaseType}
                       onChange={(e) => setDiseaseType(e.target.value as any)}
                       className="w-full px-3 py-2 text-xs font-mono bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded focus:outline-none"
                     >
-                      <option value="none">Sehat Mandiri (Pencegahan Umum)</option>
-                      <option value="kidney">Gagal Ginjal Kronis (CKD - Non Dialisis)</option>
-                      <option value="hypertension">Hipertensi (DASH Diet)</option>
+                      <option value="none">
+                        Sehat Mandiri (Pencegahan Umum)
+                      </option>
+                      <option value="kidney">
+                        Gagal Ginjal Kronis (CKD - Non Dialisis)
+                      </option>
+                      <option value="hypertension">
+                        Hipertensi (DASH Diet)
+                      </option>
                       <option value="gout">Asam Urat (Rendah Purin)</option>
                     </select>
                   </div>
 
                   {/* Dynamic Lab Fields */}
                   <div className="grid grid-cols-2 gap-3">
-                    {diseaseType === 'kidney' && (
+                    {diseaseType === "kidney" && (
                       <>
                         <div>
-                          <label className="text-[9px] font-mono block text-red-500 mb-1">KADAR eGFR (ML/MIN)</label>
+                          <label className="text-[9px] font-mono block text-red-500 mb-1">
+                            KADAR eGFR (ML/MIN)
+                          </label>
                           <input
                             type="number"
-                            value={eGFR || ''}
-                            onChange={(e) => seteGFR(e.target.value ? Number(e.target.value) : undefined)}
+                            value={eGFR || ""}
+                            onChange={(e) =>
+                              seteGFR(
+                                e.target.value
+                                  ? Number(e.target.value)
+                                  : undefined,
+                              )
+                            }
                             placeholder="45"
                             className="w-full px-2 py-1.5 text-xs font-mono bg-zinc-50 dark:bg-zinc-900 border border-red-200 dark:border-red-950 rounded focus:outline-none"
                           />
                         </div>
                         <div>
-                          <label className="text-[9px] font-mono block text-red-500 mb-1">KALIUM DARAH (MEQ/L)</label>
+                          <label className="text-[9px] font-mono block text-red-500 mb-1">
+                            KALIUM DARAH (MEQ/L)
+                          </label>
                           <input
                             type="number"
                             step="0.1"
-                            value={serumPotassium || ''}
-                            onChange={(e) => setSerumPotassium(e.target.value ? Number(e.target.value) : undefined)}
+                            value={serumPotassium || ""}
+                            onChange={(e) =>
+                              setSerumPotassium(
+                                e.target.value
+                                  ? Number(e.target.value)
+                                  : undefined,
+                              )
+                            }
                             placeholder="5.4"
                             className="w-full px-2 py-1.5 text-xs font-mono bg-zinc-50 dark:bg-zinc-900 border border-red-200 dark:border-red-950 rounded focus:outline-none"
                           />
                         </div>
                       </>
                     )}
-                    {diseaseType === 'hypertension' && (
+                    {diseaseType === "hypertension" && (
                       <>
                         <div>
-                          <label className="text-[9px] font-mono block text-amber-500 mb-1">TEKANAN SISTOLIK (MMHG)</label>
+                          <label className="text-[9px] font-mono block text-amber-500 mb-1">
+                            TEKANAN SISTOLIK (MMHG)
+                          </label>
                           <input
                             type="number"
-                            value={bpSystolic || ''}
-                            onChange={(e) => setBpSystolic(e.target.value ? Number(e.target.value) : undefined)}
+                            value={bpSystolic || ""}
+                            onChange={(e) =>
+                              setBpSystolic(
+                                e.target.value
+                                  ? Number(e.target.value)
+                                  : undefined,
+                              )
+                            }
                             placeholder="145"
                             className="w-full px-2 py-1.5 text-xs font-mono bg-zinc-50 dark:bg-zinc-900 border border-amber-200 dark:border-amber-950 rounded focus:outline-none"
                           />
                         </div>
                         <div>
-                          <label className="text-[9px] font-mono block text-amber-500 mb-1">DIASTOLIK (MMHG)</label>
+                          <label className="text-[9px] font-mono block text-amber-500 mb-1">
+                            DIASTOLIK (MMHG)
+                          </label>
                           <input
                             type="number"
-                            value={bpDiastolic || ''}
-                            onChange={(e) => setBpDiastolic(e.target.value ? Number(e.target.value) : undefined)}
+                            value={bpDiastolic || ""}
+                            onChange={(e) =>
+                              setBpDiastolic(
+                                e.target.value
+                                  ? Number(e.target.value)
+                                  : undefined,
+                              )
+                            }
                             placeholder="90"
                             className="w-full px-2 py-1.5 text-xs font-mono bg-zinc-50 dark:bg-zinc-900 border border-amber-200 dark:border-amber-950 rounded focus:outline-none"
                           />
                         </div>
                       </>
                     )}
-                    {diseaseType === 'gout' && (
+                    {diseaseType === "gout" && (
                       <div className="col-span-2">
-                        <label className="text-[9px] font-mono block text-zinc-500 mb-1">KADAR ASAM URAT DARAH (MG/DL)</label>
+                        <label className="text-[9px] font-mono block text-zinc-500 mb-1">
+                          KADAR ASAM URAT DARAH (MG/DL)
+                        </label>
                         <input
                           type="number"
                           step="0.1"
-                          value={uricAcid || ''}
-                          onChange={(e) => setUricAcid(e.target.value ? Number(e.target.value) : undefined)}
+                          value={uricAcid || ""}
+                          onChange={(e) =>
+                            setUricAcid(
+                              e.target.value
+                                ? Number(e.target.value)
+                                : undefined,
+                            )
+                          }
                           placeholder="8.5"
                           className="w-full px-2 py-1.5 text-xs font-mono bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded focus:outline-none"
                         />
                       </div>
                     )}
-                    {diseaseType === 'none' && (
+                    {diseaseType === "none" && (
                       <div className="col-span-2 p-3 bg-zinc-50 dark:bg-zinc-900 rounded font-mono text-[10px] text-zinc-500 text-center flex items-center justify-center">
-                        Tidak ada parameter biokimia tambahan yang diperlukan untuk status Sehat Umum.
+                        Tidak ada parameter biokimia tambahan yang diperlukan
+                        untuk status Sehat Umum.
                       </div>
                     )}
                   </div>
                 </div>
 
                 <div className="p-4 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded font-mono text-[10px] text-zinc-500">
-                  *Perubahan pada data Asesmen di atas akan langsung menghitung ulang kebutuhan energi TEE dan memperbarui draf diagnosis otomatis serta batasan nutrisi di langkah selanjutnya.
+                  *Perubahan pada data Asesmen di atas akan langsung menghitung
+                  ulang kebutuhan energi TEE dan memperbarui draf diagnosis
+                  otomatis serta batasan nutrisi di langkah selanjutnya.
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-            {/* LANGKAH 2: DIAGNOSIS OTOMATIS */}
-            {activeTab === 'diagnosis' && (
-              <div className="space-y-6">
-                <div>
-                  <h3 className="font-display font-bold text-lg border-b border-zinc-100 dark:border-zinc-900 pb-2 mb-4">Langkah 2: Diagnosis Gizi Otomatis (PES Mandiri)</h3>
-                  
-                  <div className="border border-red-200 bg-red-50 dark:border-red-950/40 dark:bg-red-950/20 p-4 text-red-800 dark:text-red-300 text-xs rounded mb-4 font-mono">
-                    <strong>PENTING:</strong> Draf PES Statement di bawah dianalisis otomatis oleh sistem berdasarkan input parameter klinis Anda. Harap konsultasikan draf ini dengan dokter keluarga Anda untuk penegakan diagnosa definitif.
-                  </div>
+          {/* LANGKAH 2: DIAGNOSIS OTOMATIS */}
+          {activeTab === "diagnosis" && (
+            <div className="space-y-6">
+              <div>
+                <h3 className="font-display font-bold text-lg border-b border-zinc-100 dark:border-zinc-900 pb-2 mb-4">
+                  Langkah 2: Diagnosis Gizi Otomatis (PES Mandiri)
+                </h3>
 
-                  <div className="space-y-4">
-                    {pesStatements.map((stmt, i) => (
-                      <div key={i} className="p-4 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 rounded font-mono text-xs flex gap-3">
-                        <span className="text-zinc-400 font-bold">[{i+1}]</span>
-                        <p className="leading-relaxed">{stmt}</p>
-                      </div>
-                    ))}
-                  </div>
+                <div className="border border-red-200 bg-red-50 dark:border-red-950/40 dark:bg-red-950/20 p-4 text-red-800 dark:text-red-300 text-xs rounded mb-4 font-mono">
+                  <strong>PENTING:</strong> Draf PES Statement di bawah
+                  dianalisis otomatis oleh sistem berdasarkan input parameter
+                  klinis Anda. Harap konsultasikan draf ini dengan dokter
+                  keluarga Anda untuk penegakan diagnosa definitif.
                 </div>
-              </div>
-            )}
 
-            {/* LANGKAH 3: RENCANA GIZI & CALCULATORS */}
-            {activeTab === 'intervention' && (
-              <div className="space-y-6">
-                <div>
-                  <h3 className="font-display font-bold text-lg border-b border-zinc-100 dark:border-zinc-900 pb-2 mb-4">Langkah 3: Rencana Gizi &amp; Perhitungan Kemenkes</h3>
-                  
-                  {/* Energy targets */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                    <div className="p-4 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 rounded flex flex-col justify-center items-center text-center">
-                      <span className="text-[10px] font-mono text-zinc-400 mb-1">BMR (HARRIS-BENEDICT)</span>
-                      <span className="font-mono text-lg font-bold">{Math.round(bmr)} kcal</span>
-                    </div>
-                    <div className="p-4 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 rounded flex flex-col justify-center items-center text-center">
-                      <span className="text-[10px] font-mono text-zinc-400 mb-1">FAKTOR KONDISI MEDIS</span>
-                      <span className="font-mono text-sm">{stressFactor}x ({diseaseType.toUpperCase()})</span>
-                    </div>
-                    <div className="p-4 bg-zinc-900 text-white dark:bg-white dark:text-black rounded flex flex-col justify-center items-center text-center">
-                      <span className="text-[9px] font-mono text-zinc-400">TARGET ENERGI TOTAL (TEE)</span>
-                      <span className="font-mono text-xl font-bold">{tee} kcal</span>
-                    </div>
-                  </div>
-
-                  {/* Macros & Micros Targets */}
-                  <h4 className="font-mono text-xs text-zinc-400 mb-3 uppercase tracking-wider">// Batas Gizi Makro &amp; Mikro Harian</h4>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                    {/* Protein */}
-                    <div className="border border-zinc-200 dark:border-zinc-800 p-4 bg-white dark:bg-zinc-950 rounded">
-                      <label className="text-[9px] font-mono block text-zinc-400 mb-1">PROTEIN (GRAM)</label>
-                      <input
-                        type="number"
-                        value={finalRecs.protein}
-                        onChange={(e) => setCustomProtein(Number(e.target.value))}
-                        className="w-full px-2 py-1 text-sm font-mono bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 focus:outline-none"
-                      />
-                      <span className="text-[8px] font-mono text-zinc-400 block mt-1">Saran Kemenkes: {defaultRecs.protein}g</span>
-                    </div>
-
-                    {/* Sodium */}
-                    <div className="border border-zinc-200 dark:border-zinc-800 p-4 bg-white dark:bg-zinc-950 rounded">
-                      <label className="text-[9px] font-mono block text-zinc-400 mb-1">NATRIUM (MG)</label>
-                      <input
-                        type="number"
-                        value={finalRecs.sodium}
-                        onChange={(e) => setCustomSodium(Number(e.target.value))}
-                        className="w-full px-2 py-1 text-sm font-mono bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 focus:outline-none"
-                      />
-                      <span className="text-[8px] font-mono text-zinc-400 block mt-1">Saran Kemenkes: {defaultRecs.sodium}mg</span>
-                    </div>
-
-                    {/* Potassium */}
-                    <div className="border border-zinc-200 dark:border-zinc-800 p-4 bg-white dark:bg-zinc-950 rounded">
-                      <label className="text-[9px] font-mono block text-zinc-400 mb-1">KALIUM (MG)</label>
-                      <input
-                        type="number"
-                        value={finalRecs.potassium}
-                        onChange={(e) => setCustomPotassium(Number(e.target.value))}
-                        className="w-full px-2 py-1 text-sm font-mono bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 focus:outline-none"
-                      />
-                      <span className="text-[8px] font-mono text-zinc-400 block mt-1">Saran Kemenkes: {defaultRecs.potassium}mg</span>
-                    </div>
-
-                    {/* Fluid */}
-                    <div className="border border-zinc-200 dark:border-zinc-800 p-4 bg-white dark:bg-zinc-950 rounded">
-                      <label className="text-[9px] font-mono block text-zinc-400 mb-1">BATAS CAIRAN (ML)</label>
-                      <input
-                        type="number"
-                        value={finalRecs.fluid}
-                        onChange={(e) => setCustomFluid(Number(e.target.value))}
-                        className="w-full px-2 py-1 text-sm font-mono bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 focus:outline-none"
-                      />
-                      <span className="text-[8px] font-mono text-zinc-400 block mt-1">Saran Kemenkes: {defaultRecs.fluid}ml</span>
-                    </div>
-                  </div>
-
-                  {/* Leaflet Generation */}
-                  <div className="border border-dashed border-zinc-300 dark:border-zinc-700 p-5 rounded-lg flex flex-col md:flex-row justify-between items-center gap-4 bg-zinc-50 dark:bg-zinc-900/50">
-                    <div>
-                      <p className="text-xs font-mono font-bold">EKSPOR LEAFLET DIET {diseaseType.toUpperCase()} (PDF)</p>
-                      <p className="text-[10px] text-zinc-500 font-mono">Simpan konfigurasi diet pribadi Anda ke dokumen PDF yang berisi panduan anjuran bahan makanan Kemenkes.</p>
-                    </div>
-                    <button
-                      onClick={() => {
-                        setPdfGenerated(true);
-                        alert('Berhasil menghasilkan Leaflet PDF Diet (Simulasi). Dokumen siap diunduh dan disimpan.');
-                      }}
-                      className="px-4 py-2 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-black font-mono text-xs hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors"
+                <div className="space-y-4">
+                  {pesStatements.map((stmt, i) => (
+                    <div
+                      key={i}
+                      className="p-4 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 rounded font-mono text-xs flex gap-3"
                     >
-                      {pdfGenerated ? 'PDF TERUNGGAH ✓' : 'GENERATE PDF DIET'}
-                    </button>
-                  </div>
+                      <span className="text-zinc-400 font-bold">[{i + 1}]</span>
+                      <p className="leading-relaxed">{stmt}</p>
+                    </div>
+                  ))}
                 </div>
               </div>
-            )}
+            </div>
+          )}
 
-            {/* LANGKAH 4: DAILY MONITORING LOG */}
-            {activeTab === 'monitoring' && (
-              <div className="space-y-6">
-                <div>
-                  <h3 className="font-display font-bold text-lg border-b border-zinc-100 dark:border-zinc-900 pb-2 mb-4">Langkah 4: Log Asupan Makanan &amp; Monitoring</h3>
-                  
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                    {/* Visual Progress bars */}
-                    <div className="lg:col-span-6 space-y-4">
-                      <h4 className="font-mono text-xs text-zinc-400 uppercase tracking-wider">// Progres Asupan Hari Ini</h4>
-                      
-                      <div className="space-y-4 border border-zinc-200 dark:border-zinc-800 p-4 bg-zinc-50 dark:bg-zinc-900 rounded-lg">
-                        <div>
-                          <div className="flex justify-between text-xs font-mono mb-1">
-                            <span>Energi Harian</span>
-                            <span>{totalCalories} / {tee} kcal</span>
-                          </div>
-                          <div className="h-2 bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden">
-                            <div className="h-full bg-zinc-800 dark:bg-zinc-200" style={{ width: `${Math.min((totalCalories / tee) * 100, 100)}%` }}></div>
-                          </div>
+          {/* LANGKAH 3: RENCANA GIZI & CALCULATORS */}
+          {activeTab === "intervention" && (
+            <div className="space-y-6">
+              <div>
+                <h3 className="font-display font-bold text-lg border-b border-zinc-100 dark:border-zinc-900 pb-2 mb-4">
+                  Langkah 3: Rencana Gizi &amp; Perhitungan Kemenkes
+                </h3>
+
+                {/* Energy targets */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                  <div className="p-4 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 rounded flex flex-col justify-center items-center text-center">
+                    <span className="text-[10px] font-mono text-zinc-400 mb-1">
+                      BMR (HARRIS-BENEDICT)
+                    </span>
+                    <span className="font-mono text-lg font-bold">
+                      {Math.round(bmr)} kcal
+                    </span>
+                  </div>
+                  <div className="p-4 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 rounded flex flex-col justify-center items-center text-center">
+                    <span className="text-[10px] font-mono text-zinc-400 mb-1">
+                      FAKTOR KONDISI MEDIS
+                    </span>
+                    <span className="font-mono text-sm">
+                      {stressFactor}x ({diseaseType.toUpperCase()})
+                    </span>
+                  </div>
+                  <div className="p-4 bg-zinc-900 text-white dark:bg-white dark:text-black rounded flex flex-col justify-center items-center text-center">
+                    <span className="text-[9px] font-mono text-zinc-400">
+                      TARGET ENERGI TOTAL (TEE)
+                    </span>
+                    <span className="font-mono text-xl font-bold">
+                      {tee} kcal
+                    </span>
+                  </div>
+                </div>
+
+                {/* Macros & Micros Targets */}
+                <h4 className="font-mono text-xs text-zinc-400 mb-3 uppercase tracking-wider">
+                  // Batas Gizi Makro &amp; Mikro Harian
+                </h4>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                  {/* Protein */}
+                  <div className="border border-zinc-200 dark:border-zinc-800 p-4 bg-white dark:bg-zinc-950 rounded">
+                    <label className="text-[9px] font-mono block text-zinc-400 mb-1">
+                      PROTEIN (GRAM)
+                    </label>
+                    <input
+                      type="number"
+                      value={finalRecs.protein}
+                      onChange={(e) => setCustomProtein(Number(e.target.value))}
+                      className="w-full px-2 py-1 text-sm font-mono bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 focus:outline-none"
+                    />
+                    <span className="text-[8px] font-mono text-zinc-400 block mt-1">
+                      Saran Kemenkes: {defaultRecs.protein}g
+                    </span>
+                  </div>
+
+                  {/* Sodium */}
+                  <div className="border border-zinc-200 dark:border-zinc-800 p-4 bg-white dark:bg-zinc-950 rounded">
+                    <label className="text-[9px] font-mono block text-zinc-400 mb-1">
+                      NATRIUM (MG)
+                    </label>
+                    <input
+                      type="number"
+                      value={finalRecs.sodium}
+                      onChange={(e) => setCustomSodium(Number(e.target.value))}
+                      className="w-full px-2 py-1 text-sm font-mono bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 focus:outline-none"
+                    />
+                    <span className="text-[8px] font-mono text-zinc-400 block mt-1">
+                      Saran Kemenkes: {defaultRecs.sodium}mg
+                    </span>
+                  </div>
+
+                  {/* Potassium */}
+                  <div className="border border-zinc-200 dark:border-zinc-800 p-4 bg-white dark:bg-zinc-950 rounded">
+                    <label className="text-[9px] font-mono block text-zinc-400 mb-1">
+                      KALIUM (MG)
+                    </label>
+                    <input
+                      type="number"
+                      value={finalRecs.potassium}
+                      onChange={(e) =>
+                        setCustomPotassium(Number(e.target.value))
+                      }
+                      className="w-full px-2 py-1 text-sm font-mono bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 focus:outline-none"
+                    />
+                    <span className="text-[8px] font-mono text-zinc-400 block mt-1">
+                      Saran Kemenkes: {defaultRecs.potassium}mg
+                    </span>
+                  </div>
+
+                  {/* Fluid */}
+                  <div className="border border-zinc-200 dark:border-zinc-800 p-4 bg-white dark:bg-zinc-950 rounded">
+                    <label className="text-[9px] font-mono block text-zinc-400 mb-1">
+                      BATAS CAIRAN (ML)
+                    </label>
+                    <input
+                      type="number"
+                      value={finalRecs.fluid}
+                      onChange={(e) => setCustomFluid(Number(e.target.value))}
+                      className="w-full px-2 py-1 text-sm font-mono bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 focus:outline-none"
+                    />
+                    <span className="text-[8px] font-mono text-zinc-400 block mt-1">
+                      Saran Kemenkes: {defaultRecs.fluid}ml
+                    </span>
+                  </div>
+                </div>
+
+                {/* Leaflet Generation */}
+                <div className="border border-dashed border-zinc-300 dark:border-zinc-700 p-5 rounded-lg flex flex-col md:flex-row justify-between items-center gap-4 bg-zinc-50 dark:bg-zinc-900/50">
+                  <div>
+                    <p className="text-xs font-mono font-bold">
+                      EKSPOR LEAFLET DIET {diseaseType.toUpperCase()} (PDF)
+                    </p>
+                    <p className="text-[10px] text-zinc-500 font-mono">
+                      Simpan konfigurasi diet pribadi Anda ke dokumen PDF yang
+                      berisi panduan anjuran bahan makanan Kemenkes.
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setPdfGenerated(true);
+                      alert(
+                        "Berhasil menghasilkan Leaflet PDF Diet (Simulasi). Dokumen siap diunduh dan disimpan.",
+                      );
+                    }}
+                    className="px-4 py-2 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-black font-mono text-xs hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors"
+                  >
+                    {pdfGenerated ? "PDF TERUNGGAH ✓" : "GENERATE PDF DIET"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* LANGKAH 4: DAILY MONITORING LOG */}
+          {activeTab === "monitoring" && (
+            <div className="space-y-6">
+              <div>
+                <h3 className="font-display font-bold text-lg border-b border-zinc-100 dark:border-zinc-900 pb-2 mb-4">
+                  Langkah 4: Log Asupan Makanan &amp; Monitoring
+                </h3>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                  {/* Visual Progress bars */}
+                  <div className="lg:col-span-6 space-y-4">
+                    <h4 className="font-mono text-xs text-zinc-400 uppercase tracking-wider">
+                      // Progres Asupan Hari Ini
+                    </h4>
+
+                    <div className="space-y-4 border border-zinc-200 dark:border-zinc-800 p-4 bg-zinc-50 dark:bg-zinc-900 rounded-lg">
+                      <div>
+                        <div className="flex justify-between text-xs font-mono mb-1">
+                          <span>Energi Harian</span>
+                          <span>
+                            {totalCalories} / {tee} kcal
+                          </span>
                         </div>
-
-                        <div>
-                          <div className="flex justify-between text-xs font-mono mb-1">
-                            <span>Protein Harian</span>
-                            <span>{totalProtein}g / {finalRecs.protein}g</span>
-                          </div>
-                          <div className="h-2 bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden">
-                            <div className="h-full bg-zinc-800 dark:bg-zinc-200" style={{ width: `${Math.min((totalProtein / finalRecs.protein) * 100, 100)}%` }}></div>
-                          </div>
+                        <div className="h-2 bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-zinc-800 dark:bg-zinc-200"
+                            style={{
+                              width: `${Math.min((totalCalories / tee) * 100, 100)}%`,
+                            }}
+                          ></div>
                         </div>
+                      </div>
 
-                        <div>
-                          <div className="flex justify-between text-xs font-mono mb-1 text-red-600 dark:text-red-400">
-                            <span>Natrium (Batas Maks)</span>
-                            <span>{totalSodium}mg / {finalRecs.sodium}mg</span>
-                          </div>
-                          <div className="h-2 bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden">
-                            <div className={`h-full ${totalSodium > finalRecs.sodium ? 'bg-red-500' : 'bg-zinc-800 dark:bg-zinc-200'}`} style={{ width: `${Math.min((totalSodium / finalRecs.sodium) * 100, 100)}%` }}></div>
-                          </div>
+                      <div>
+                        <div className="flex justify-between text-xs font-mono mb-1">
+                          <span>Protein Harian</span>
+                          <span>
+                            {totalProtein}g / {finalRecs.protein}g
+                          </span>
+                        </div>
+                        <div className="h-2 bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-zinc-800 dark:bg-zinc-200"
+                            style={{
+                              width: `${Math.min((totalProtein / finalRecs.protein) * 100, 100)}%`,
+                            }}
+                          ></div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <div className="flex justify-between text-xs font-mono mb-1 text-red-600 dark:text-red-400">
+                          <span>Natrium (Batas Maks)</span>
+                          <span>
+                            {totalSodium}mg / {finalRecs.sodium}mg
+                          </span>
+                        </div>
+                        <div className="h-2 bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden">
+                          <div
+                            className={`h-full ${totalSodium > finalRecs.sodium ? "bg-red-500" : "bg-zinc-800 dark:bg-zinc-200"}`}
+                            style={{
+                              width: `${Math.min((totalSodium / finalRecs.sodium) * 100, 100)}%`,
+                            }}
+                          ></div>
                         </div>
                       </div>
                     </div>
+                  </div>
 
-                    {/* Input log & details */}
-                    <div className="lg:col-span-6 space-y-4">
-                      <h4 className="font-mono text-xs text-zinc-400 uppercase tracking-wider">// Catat Konsumsi Makanan</h4>
-                      <form onSubmit={handleAddLog} className="space-y-3 p-4 border border-zinc-200 dark:border-zinc-800 rounded-lg">
+                  {/* Input log & details */}
+                  <div className="lg:col-span-6 space-y-4">
+                    <h4 className="font-mono text-xs text-zinc-400 uppercase tracking-wider">
+                      // Catat Konsumsi Makanan
+                    </h4>
+                    <form
+                      onSubmit={handleAddLog}
+                      className="space-y-3 p-4 border border-zinc-200 dark:border-zinc-800 rounded-lg"
+                    >
+                      <div>
+                        <label className="text-[9px] font-mono block text-zinc-400 mb-1">
+                          NAMA MAKANAN
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          placeholder="Contoh: Putih telur dadar..."
+                          value={newFood}
+                          onChange={(e) => setNewFood(e.target.value)}
+                          className="w-full px-3 py-1.5 text-xs bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded focus:outline-none"
+                        />
+                      </div>
+                      <div className="grid grid-cols-3 gap-2">
                         <div>
-                          <label className="text-[9px] font-mono block text-zinc-400 mb-1">NAMA MAKANAN</label>
+                          <label className="text-[9px] font-mono block text-zinc-400 mb-1">
+                            ENERGI (KCAL)
+                          </label>
                           <input
-                            type="text"
-                            required
-                            placeholder="Contoh: Putih telur dadar..."
-                            value={newFood}
-                            onChange={(e) => setNewFood(e.target.value)}
-                            className="w-full px-3 py-1.5 text-xs bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded focus:outline-none"
+                            type="number"
+                            placeholder="120"
+                            value={newCal}
+                            onChange={(e) => setNewCal(e.target.value)}
+                            className="w-full px-2 py-1 text-xs font-mono bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded focus:outline-none"
                           />
                         </div>
-                        <div className="grid grid-cols-3 gap-2">
-                          <div>
-                            <label className="text-[9px] font-mono block text-zinc-400 mb-1">ENERGI (KCAL)</label>
-                            <input
-                              type="number"
-                              placeholder="120"
-                              value={newCal}
-                              onChange={(e) => setNewCal(e.target.value)}
-                              className="w-full px-2 py-1 text-xs font-mono bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded focus:outline-none"
-                            />
-                          </div>
-                          <div>
-                            <label className="text-[9px] font-mono block text-zinc-400 mb-1">PROTEIN (G)</label>
-                            <input
-                              type="number"
-                              placeholder="6"
-                              value={newProtein}
-                              onChange={(e) => setNewProtein(e.target.value)}
-                              className="w-full px-2 py-1 text-xs font-mono bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded focus:outline-none"
-                            />
-                          </div>
-                          <div>
-                            <label className="text-[9px] font-mono block text-zinc-400 mb-1">NATRIUM (MG)</label>
-                            <input
-                              type="number"
-                              placeholder="80"
-                              value={newSodium}
-                              onChange={(e) => setNewSodium(e.target.value)}
-                              className="w-full px-2 py-1 text-xs font-mono bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded focus:outline-none"
-                            />
-                          </div>
+                        <div>
+                          <label className="text-[9px] font-mono block text-zinc-400 mb-1">
+                            PROTEIN (G)
+                          </label>
+                          <input
+                            type="number"
+                            placeholder="6"
+                            value={newProtein}
+                            onChange={(e) => setNewProtein(e.target.value)}
+                            className="w-full px-2 py-1 text-xs font-mono bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded focus:outline-none"
+                          />
                         </div>
-                        <button
-                          type="submit"
-                          className="w-full py-2 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-black font-mono text-xs hover:bg-zinc-800 transition-colors rounded"
-                        >
-                          TAMBAHKAN LOG MAKANAN
-                        </button>
-                      </form>
-
-                      {/* Log items list */}
-                      <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
-                        {logs.map(l => (
-                          <div key={l.id} className="p-2 border border-zinc-100 dark:border-zinc-900 text-xs flex justify-between items-center bg-white dark:bg-zinc-950">
-                            <div>
-                              <p className="font-bold">{l.food}</p>
-                              <p className="text-[9px] font-mono text-zinc-400">
-                                {l.calories} kcal • {l.protein}g Prot • {l.sodium}mg Na
-                              </p>
-                            </div>
-                            <button
-                              onClick={() => handleDeleteLog(l.id)}
-                              className="text-[10px] font-mono text-red-500 hover:text-red-400"
-                            >
-                              HAPUS
-                            </button>
-                          </div>
-                        ))}
+                        <div>
+                          <label className="text-[9px] font-mono block text-zinc-400 mb-1">
+                            NATRIUM (MG)
+                          </label>
+                          <input
+                            type="number"
+                            placeholder="80"
+                            value={newSodium}
+                            onChange={(e) => setNewSodium(e.target.value)}
+                            className="w-full px-2 py-1 text-xs font-mono bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded focus:outline-none"
+                          />
+                        </div>
                       </div>
+                      <button
+                        type="submit"
+                        className="w-full py-2 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-black font-mono text-xs hover:bg-zinc-800 transition-colors rounded"
+                      >
+                        TAMBAHKAN LOG MAKANAN
+                      </button>
+                    </form>
+
+                    {/* Log items list */}
+                    <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
+                      {logs.map((l) => (
+                        <div
+                          key={l.id}
+                          className="p-2 border border-zinc-100 dark:border-zinc-900 text-xs flex justify-between items-center bg-white dark:bg-zinc-950"
+                        >
+                          <div>
+                            <p className="font-bold">{l.food}</p>
+                            <p className="text-[9px] font-mono text-zinc-400">
+                              {l.calories} kcal • {l.protein}g Prot • {l.sodium}
+                              mg Na
+                            </p>
+                          </div>
+                          <button
+                            onClick={() => handleDeleteLog(l.id)}
+                            className="text-[10px] font-mono text-red-500 hover:text-red-400"
+                          >
+                            HAPUS
+                          </button>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
               </div>
-            )}
+            </div>
+          )}
 
-            {/* LANGKAH 5: AI GIZI ASSISTANT SIMULATOR */}
-            {activeTab === 'ai-assistant' && (
-              <div className="space-y-6">
-                <div>
-                  <h3 className="font-display font-bold text-lg border-b border-zinc-100 dark:border-zinc-900 pb-2 mb-4">Langkah 5: Konsultasi AI Gizi Assistant</h3>
-                  <p className="text-xs text-zinc-500 mb-4">
-                    Konsultasikan bahan makanan, resep gizi, atau pertanyaan diet klinis Anda dengan asisten AI:
-                  </p>
+          {/* LANGKAH 5: AI GIZI ASSISTANT SIMULATOR */}
+          {activeTab === "ai-assistant" && (
+            <div className="space-y-6">
+              <div>
+                <h3 className="font-display font-bold text-lg border-b border-zinc-100 dark:border-zinc-900 pb-2 mb-4">
+                  Langkah 5: Konsultasi AI Gizi Assistant
+                </h3>
+                <p className="text-xs text-zinc-500 mb-4">
+                  Konsultasikan bahan makanan, resep gizi, atau pertanyaan diet
+                  klinis Anda dengan asisten AI:
+                </p>
 
-                  {/* Chat messages */}
-                  <div className="h-64 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/30 p-4 rounded overflow-y-auto space-y-3">
-                    {chatMessages.map(msg => (
-                      <div 
-                        key={msg.id} 
-                        className={`max-w-[85%] p-3 rounded text-xs leading-relaxed ${msg.sender === 'user' ? 'bg-zinc-900 text-white dark:bg-white dark:text-black ml-auto' : 'bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 mr-auto'}`}
-                      >
-                        <p>{msg.text}</p>
-                        <span className="text-[8px] font-mono text-zinc-400 block mt-1 text-right">
-                          {msg.timestamp}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Chat input */}
-                  <form onSubmit={handleSendMessage} className="flex gap-2">
-                    <input
-                      type="text"
-                      placeholder="Tanyakan hal gizi (Contoh: Bolehkan saya makan daging sapi?)..."
-                      value={typedMessage}
-                      onChange={(e) => setTypedMessage(e.target.value)}
-                      className="flex-1 px-3 py-2 text-xs bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded focus:outline-none"
-                    />
-                    <button
-                      type="submit"
-                      className="px-4 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-black text-xs font-mono hover:bg-zinc-800 transition-colors rounded"
+                {/* Chat messages */}
+                <div className="h-64 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/30 p-4 rounded overflow-y-auto space-y-3">
+                  {chatMessages.map((msg) => (
+                    <div
+                      key={msg.id}
+                      className={`max-w-[85%] p-3 rounded text-xs leading-relaxed ${msg.sender === "user" ? "bg-zinc-900 text-white dark:bg-white dark:text-black ml-auto" : "bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 mr-auto"}`}
                     >
-                      KIRIM
-                    </button>
-                  </form>
+                      <p>{msg.text}</p>
+                      <span className="text-[8px] font-mono text-zinc-400 block mt-1 text-right">
+                        {msg.timestamp}
+                      </span>
+                    </div>
+                  ))}
                 </div>
+
+                {/* Chat input */}
+                <form onSubmit={handleSendMessage} className="flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="Tanyakan hal gizi (Contoh: Bolehkan saya makan daging sapi?)..."
+                    value={typedMessage}
+                    onChange={(e) => setTypedMessage(e.target.value)}
+                    className="flex-1 px-3 py-2 text-xs bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded focus:outline-none"
+                  />
+                  <button
+                    type="submit"
+                    className="px-4 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-black text-xs font-mono hover:bg-zinc-800 transition-colors rounded"
+                  >
+                    KIRIM
+                  </button>
+                </form>
               </div>
-            )}
-          </div>
-        </main>
-      </div>
+            </div>
+          )}
+        </div>
+      </main>
+    </div>
   );
 }
 
 export default function SelfCareDashboard() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#fafafa] dark:bg-[#09090b] flex items-center justify-center font-mono text-xs text-zinc-500">// MEMUAT KONSOL GIZI MANDIRI...</div>}>
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#fafafa] dark:bg-[#09090b] flex items-center justify-center font-mono text-xs text-zinc-500">
+          // MEMUAT KONSOL GIZI MANDIRI...
+        </div>
+      }
+    >
       <SelfCareDashboardContent />
     </Suspense>
   );
