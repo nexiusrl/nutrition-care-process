@@ -31,8 +31,6 @@ Dasbor dirancang dengan alur terbimbing bertahap yang runtut:
 4. **Langkah 4: Log Harian & Monitoring**
    * Pencatatan asupan makan harian pengguna secara mobile-friendly.
    * Indikator grafik progress bar kemajuan gizi aktual vs target batas gizi harian yang reaktif secara real-time.
-5. **Langkah 5: AI Gizi Assistant**
-   * Simulator bot asisten AI yang cerdas menjawab pertanyaan diet klinis pengguna secara kontekstual sesuai parameter kondisi tubuh dan penyakitnya.
 
 ---
 
