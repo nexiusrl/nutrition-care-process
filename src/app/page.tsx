@@ -105,91 +105,118 @@ export default function Home() {
               Siklus ADIME Berbasis Self-Care
             </h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-            <div className="border border-zinc-200 dark:border-zinc-800 p-6 bg-white dark:bg-zinc-950 flex flex-col justify-between h-64">
-              <div>
-                <span className="font-mono text-zinc-400 text-sm block mb-4">
-                  STEP 01
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+            {/* Card 01 — Asesmen */}
+            <div className="group relative overflow-hidden rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-6 flex flex-col justify-between h-72 cursor-default transition-all duration-300 ease-out hover:-translate-y-2 hover:shadow-[0_20px_60px_-12px_rgba(0,0,0,0.15)] dark:hover:shadow-[0_20px_60px_-12px_rgba(0,0,0,0.5)] hover:border-zinc-400 dark:hover:border-zinc-600">
+              {/* Accent bar — grows on hover */}
+              <div className="absolute top-0 left-0 w-1 bg-zinc-900 dark:bg-zinc-100 h-0 group-hover:h-full transition-all duration-500 ease-out"></div>
+              {/* Watermark step number */}
+              <span className="absolute -right-2 -top-4 font-display text-[7rem] font-black leading-none text-zinc-100 dark:text-zinc-900 select-none pointer-events-none transition-all duration-500 ease-out group-hover:-translate-y-2 group-hover:translate-x-1 group-hover:text-zinc-200 dark:group-hover:text-zinc-800">
+                01
+              </span>
+              <div className="relative z-10">
+                <span className="font-mono text-zinc-400 text-[10px] tracking-widest block mb-3 uppercase">
+                  Step 01
                 </span>
-                <h3 className="font-display font-bold text-xl mb-2">Asesmen</h3>
-                <p className="text-xs text-zinc-500">
+                <h3 className="font-display font-bold text-xl mb-2 transition-colors duration-300 group-hover:text-zinc-900 dark:group-hover:text-white">Asesmen</h3>
+                <p className="text-xs text-zinc-500 leading-relaxed">
                   Input mandiri data antropometri Anda (BB, TB) beserta hasil
                   laboratorium medis terakhir secara aman.
                 </p>
               </div>
-              <div className="font-mono text-[10px] text-zinc-400">
+              <div className="relative z-10 font-mono text-[10px] text-zinc-400 transition-all duration-300 group-hover:text-zinc-700 dark:group-hover:text-zinc-300 group-hover:tracking-wider">
                 DATA ENTRY MANDIRI
               </div>
             </div>
 
-            <div className="border border-zinc-200 dark:border-zinc-800 p-6 bg-white dark:bg-zinc-950 flex flex-col justify-between h-64">
-              <div>
-                <span className="font-mono text-zinc-400 text-sm block mb-4">
-                  STEP 02
+            {/* Card 02 — Diagnosis */}
+            <div className="group relative overflow-hidden rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-6 flex flex-col justify-between h-72 cursor-default transition-all duration-300 ease-out hover:-translate-y-2 hover:shadow-[0_20px_60px_-12px_rgba(0,0,0,0.15)] dark:hover:shadow-[0_20px_60px_-12px_rgba(0,0,0,0.5)] hover:border-zinc-400 dark:hover:border-zinc-600">
+              <div className="absolute top-0 left-0 w-1 bg-zinc-900 dark:bg-zinc-100 h-0 group-hover:h-full transition-all duration-500 ease-out"></div>
+              <span className="absolute -right-2 -top-4 font-display text-[7rem] font-black leading-none text-zinc-100 dark:text-zinc-900 select-none pointer-events-none transition-all duration-500 ease-out group-hover:-translate-y-2 group-hover:translate-x-1 group-hover:text-zinc-200 dark:group-hover:text-zinc-800">
+                02
+              </span>
+              <div className="relative z-10">
+                <span className="font-mono text-zinc-400 text-[10px] tracking-widest block mb-3 uppercase">
+                  Step 02
                 </span>
-                <h3 className="font-display font-bold text-xl mb-2">
+                <h3 className="font-display font-bold text-xl mb-2 transition-colors duration-300 group-hover:text-zinc-900 dark:group-hover:text-white">
                   Diagnosis
                 </h3>
-                <p className="text-xs text-zinc-500">
+                <p className="text-xs text-zinc-500 leading-relaxed">
                   Sistem mengidentifikasi anomali indikator tubuh Anda dan
                   menerbitkannya menjadi draf diagnosis gizi otomatis.
                 </p>
               </div>
-              <div className="font-mono text-[10px] text-zinc-400">
+              <div className="relative z-10 font-mono text-[10px] text-zinc-400 transition-all duration-300 group-hover:text-zinc-700 dark:group-hover:text-zinc-300 group-hover:tracking-wider">
                 PES AUTO-STATEMENT
               </div>
             </div>
 
-            <div className="border border-zinc-200 dark:border-zinc-800 p-6 bg-white dark:bg-zinc-950 flex flex-col justify-between h-64">
-              <div>
-                <span className="font-mono text-zinc-400 text-sm block mb-4">
-                  STEP 03
+            {/* Card 03 — Intervensi */}
+            <div className="group relative overflow-hidden rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-6 flex flex-col justify-between h-72 cursor-default transition-all duration-300 ease-out hover:-translate-y-2 hover:shadow-[0_20px_60px_-12px_rgba(0,0,0,0.15)] dark:hover:shadow-[0_20px_60px_-12px_rgba(0,0,0,0.5)] hover:border-zinc-400 dark:hover:border-zinc-600">
+              <div className="absolute top-0 left-0 w-1 bg-zinc-900 dark:bg-zinc-100 h-0 group-hover:h-full transition-all duration-500 ease-out"></div>
+              <span className="absolute -right-2 -top-4 font-display text-[7rem] font-black leading-none text-zinc-100 dark:text-zinc-900 select-none pointer-events-none transition-all duration-500 ease-out group-hover:-translate-y-2 group-hover:translate-x-1 group-hover:text-zinc-200 dark:group-hover:text-zinc-800">
+                03
+              </span>
+              <div className="relative z-10">
+                <span className="font-mono text-zinc-400 text-[10px] tracking-widest block mb-3 uppercase">
+                  Step 03
                 </span>
-                <h3 className="font-display font-bold text-xl mb-2">
+                <h3 className="font-display font-bold text-xl mb-2 transition-colors duration-300 group-hover:text-zinc-900 dark:group-hover:text-white">
                   Intervensi
                 </h3>
-                <p className="text-xs text-zinc-500">
+                <p className="text-xs text-zinc-500 leading-relaxed">
                   Memperoleh batas konsumsi makronutrien/mikronutrien presisi
                   dan mengunduh Leaflet Diet khusus pribadi Anda.
                 </p>
               </div>
-              <div className="font-mono text-[10px] text-zinc-400">
+              <div className="relative z-10 font-mono text-[10px] text-zinc-400 transition-all duration-300 group-hover:text-zinc-700 dark:group-hover:text-zinc-300 group-hover:tracking-wider">
                 CUSTOM TARGET &amp; PDF
               </div>
             </div>
 
-            <div className="border border-zinc-200 dark:border-zinc-800 p-6 bg-white dark:bg-zinc-950 flex flex-col justify-between h-64">
-              <div>
-                <span className="font-mono text-zinc-400 text-sm block mb-4">
-                  STEP 04
+            {/* Card 04 — Monitoring */}
+            <div className="group relative overflow-hidden rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-6 flex flex-col justify-between h-72 cursor-default transition-all duration-300 ease-out hover:-translate-y-2 hover:shadow-[0_20px_60px_-12px_rgba(0,0,0,0.15)] dark:hover:shadow-[0_20px_60px_-12px_rgba(0,0,0,0.5)] hover:border-zinc-400 dark:hover:border-zinc-600">
+              <div className="absolute top-0 left-0 w-1 bg-zinc-900 dark:bg-zinc-100 h-0 group-hover:h-full transition-all duration-500 ease-out"></div>
+              <span className="absolute -right-2 -top-4 font-display text-[7rem] font-black leading-none text-zinc-100 dark:text-zinc-900 select-none pointer-events-none transition-all duration-500 ease-out group-hover:-translate-y-2 group-hover:translate-x-1 group-hover:text-zinc-200 dark:group-hover:text-zinc-800">
+                04
+              </span>
+              <div className="relative z-10">
+                <span className="font-mono text-zinc-400 text-[10px] tracking-widest block mb-3 uppercase">
+                  Step 04
                 </span>
-                <h3 className="font-display font-bold text-xl mb-2">
+                <h3 className="font-display font-bold text-xl mb-2 transition-colors duration-300 group-hover:text-zinc-900 dark:group-hover:text-white">
                   Monitoring
                 </h3>
-                <p className="text-xs text-zinc-500">
+                <p className="text-xs text-zinc-500 leading-relaxed">
                   Catat log asupan makan aktual harian Anda untuk membandingkan
                   asupan vs batas gizi patologis.
                 </p>
               </div>
-              <div className="font-mono text-[10px] text-zinc-400">
+              <div className="relative z-10 font-mono text-[10px] text-zinc-400 transition-all duration-300 group-hover:text-zinc-700 dark:group-hover:text-zinc-300 group-hover:tracking-wider">
                 DAILY DIET TRACKING
               </div>
             </div>
 
-            <div className="border border-zinc-200 dark:border-zinc-800 p-6 bg-white dark:bg-zinc-950 flex flex-col justify-between h-64">
-              <div>
-                <span className="font-mono text-zinc-400 text-sm block mb-4">
-                  STEP 05
+            {/* Card 05 — Evaluasi */}
+            <div className="group relative overflow-hidden rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-6 flex flex-col justify-between h-72 cursor-default transition-all duration-300 ease-out hover:-translate-y-2 hover:shadow-[0_20px_60px_-12px_rgba(0,0,0,0.15)] dark:hover:shadow-[0_20px_60px_-12px_rgba(0,0,0,0.5)] hover:border-zinc-400 dark:hover:border-zinc-600">
+              <div className="absolute top-0 left-0 w-1 bg-zinc-900 dark:bg-zinc-100 h-0 group-hover:h-full transition-all duration-500 ease-out"></div>
+              <span className="absolute -right-2 -top-4 font-display text-[7rem] font-black leading-none text-zinc-100 dark:text-zinc-900 select-none pointer-events-none transition-all duration-500 ease-out group-hover:-translate-y-2 group-hover:translate-x-1 group-hover:text-zinc-200 dark:group-hover:text-zinc-800">
+                05
+              </span>
+              <div className="relative z-10">
+                <span className="font-mono text-zinc-400 text-[10px] tracking-widest block mb-3 uppercase">
+                  Step 05
                 </span>
-                <h3 className="font-display font-bold text-xl mb-2">
+                <h3 className="font-display font-bold text-xl mb-2 transition-colors duration-300 group-hover:text-zinc-900 dark:group-hover:text-white">
                   Evaluasi
                 </h3>
-                <p className="text-xs text-zinc-500">
+                <p className="text-xs text-zinc-500 leading-relaxed">
                   Melihat grafik kepatuhan diet harian dan berkonsultasi dengan
                   Simulator AI Gizi jika memiliki pertanyaan.
                 </p>
               </div>
-              <div className="font-mono text-[10px] text-zinc-400">
+              <div className="relative z-10 font-mono text-[10px] text-zinc-400 transition-all duration-300 group-hover:text-zinc-700 dark:group-hover:text-zinc-300 group-hover:tracking-wider">
                 AI ASSISTANT FEEDBACK
               </div>
             </div>
