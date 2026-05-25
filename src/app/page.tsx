@@ -84,7 +84,7 @@ export default function Home() {
                 href="/dashboard"
                 className="flex items-center justify-center px-8 h-12 bg-primary text-primary-foreground text-sm font-mono tracking-tight hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors"
               >
-                MULAI ASKEP MANDIRI (DEMO) &rarr;
+                MULAI SEKARANG &rarr;
               </Link>
             </div>
           </div>
@@ -118,7 +118,9 @@ export default function Home() {
                 <span className="font-mono text-zinc-400 text-[10px] tracking-widest block mb-3 uppercase">
                   Step 01
                 </span>
-                <h3 className="font-display font-bold text-xl mb-2 transition-colors duration-300 group-hover:text-zinc-900 dark:group-hover:text-white">Asesmen</h3>
+                <h3 className="font-display font-bold text-xl mb-2 transition-colors duration-300 group-hover:text-zinc-900 dark:group-hover:text-white">
+                  Asesmen
+                </h3>
                 <p className="text-xs text-zinc-500 leading-relaxed">
                   Input mandiri data antropometri Anda (BB, TB) beserta hasil
                   laboratorium medis terakhir secara aman.
