@@ -15,13 +15,6 @@ import {
   NutrientRecommendations,
 } from "@/utils/nutritionCalculations";
 
-interface ChatMessage {
-  id: string;
-  sender: "user" | "ai";
-  text: string;
-  timestamp: string;
-}
-
 interface FoodLog {
   id: string;
   food: string;
